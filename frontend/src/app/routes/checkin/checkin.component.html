@@ -5,12 +5,11 @@
     <div class="col-auto">Group table</div>
   </div>
   <div *ngFor="let student of students" class="row">
-    <div class="col-8">
+    <div class="col-10">
       {{student.name}}
     </div>
     <div class="col-1">{{student.visit == VisitType.INTERNAL}}</div>
-    <div class="col-1"></div>
-    <div (click)="removeStudent(student.id)" class="col-2">
+    <div (click)="removeStudent(student.id)" class="col-1">
       <i class="material-icons" style="cursor: pointer">
         delete
       </i>
@@ -20,6 +19,16 @@
     <div class="col-5">
       <mat-form-field style="width: 100%">
         <input matInput [(ngModel)]="newStudentName">
+      </mat-form-field>
+    </div>
+    <div class="col-4">
+      <mat-form-field>
+        <mat-label>Visit type</mat-label>
+        <mat-select [(value)]="newStudentType">
+          <mat-option *ngFor="let option of visitOptions" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
     <div class="col-3" (click)="addStudent()">

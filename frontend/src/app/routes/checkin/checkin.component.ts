@@ -17,11 +17,11 @@ function studentId() {
   return lastStudentId++;
 }
 
-function generateStudent(name: string): Student {
+function generateStudent(name: string, visitType: VisitType = VisitType.INTERNAL): Student {
   return {
     id: studentId(),
     name,
-    visit: null,
+    visit: visitType,
   };
 }
 
@@ -32,6 +32,7 @@ function generateStudent(name: string): Student {
 })
 export class CheckinComponent implements OnInit {
   VisitType = VisitType;
+  visitOptions = Object.values(VisitType);
 
   students: Student[] = [
     generateStudent('John Doe'),
@@ -39,6 +40,7 @@ export class CheckinComponent implements OnInit {
     generateStudent('Anna'),
     generateStudent('Micha'),
   ];
+  newStudentType: VisitType = VisitType.INTERNAL;
   newStudentName: string;
   constructor() { }
 
@@ -57,7 +59,8 @@ export class CheckinComponent implements OnInit {
     if (this.students.some((student) => student.name === this.newStudentName)) {
       return;
     }
-    const newStudent: Student = generateStudent(this.newStudentName);
+    console.log(this.newStudentType);
+    const newStudent: Student = generateStudent(this.newStudentName, this.newStudentType);
     this.students = this.students.concat([newStudent]);
     this.newStudentName = '';
   }
