@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Student, StudentsService, VisitType } from '../../services/students-service/students-service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 interface NewStudentFormState {
   name: string;
@@ -16,8 +17,7 @@ export class CheckinComponent implements OnInit {
   VisitType = VisitType;
   visitOptions = Object.values(VisitType);
 
-  students: Student[] = [];
-  newStudentType: VisitType = VisitType.INTERNAL;
+  students$: Observable<Student[]>;
   newStudent = new FormGroup({
     name: new FormControl('', Validators.required),
     visitType: new FormControl(VisitType.INTERNAL),
@@ -25,24 +25,20 @@ export class CheckinComponent implements OnInit {
   constructor(private studentsService: StudentsService) { }
 
   ngOnInit() {
-    this.students = this.studentsService.getAllStudents();
+    this.students$ = this.studentsService.getAllStudents();
   }
 
   showStudents() {
-    console.log(this.students);
+    this.studentsService.showStudents();
   }
 
   removeStudent(id: number) {
-    this.students = this.students.filter((it) => it.id !== id);
+    this.studentsService.removeStudent(id);
   }
 
   addStudent() {
-    if (this.students.some((student) => student.name === this.newStudent.value.name)) {
-      return;
-    }
     const values: NewStudentFormState = this.newStudent.value;
-    const newStudent: Student = this.studentsService.createNewStudent(values.name, values.visitType);
-    this.students = this.students.concat([newStudent]);
+    this.studentsService.createNewStudent(values.name, values.visitType);
     this.newStudent.reset({
       name: '',
       visitType: VisitType.INTERNAL,

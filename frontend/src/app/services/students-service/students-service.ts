@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 export enum VisitType {
   INTERNAL = 'INTERNAL',
@@ -27,15 +28,26 @@ export interface Student {
 
 @Injectable()
 export class StudentsService {
-  getAllStudents(): Student[] {
-    return [
+  private students$ = new BehaviorSubject<Student[]>([]);
+  getAllStudents(): Observable<Student[]> {
+    this.students$.next([
       generateStudent('John Doe'),
       generateStudent('Alexei Gontar'),
       generateStudent('Anna'),
       generateStudent('Micha'),
-    ];
+    ]);
+    return this.students$;
   }
-  createNewStudent(name: string, visitType: VisitType): Student {
-    return generateStudent(name, visitType);
+  createNewStudent(name: string, visitType: VisitType): void {
+    const newState = this.students$.value.concat([generateStudent(name, visitType)]);
+    this.students$.next(newState);
+    // return generateStudent(name, visitType);
+  }
+  removeStudent(id: number): void {
+    const newState = this.students$.value.filter((it) => it.id !== id);
+    this.students$.next(newState);
+  }
+  showStudents() {
+    console.log(this.students$.value);
   }
 }
