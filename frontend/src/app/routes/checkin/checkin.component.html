@@ -15,16 +15,16 @@
       </i>
     </div>
   </div>
-  <div class="row">
+  <div class="row" [formGroup]="newStudent">
     <div class="col-5">
       <mat-form-field style="width: 100%">
-        <input matInput [(ngModel)]="newStudentName">
+        <input matInput formControlName="name">
       </mat-form-field>
     </div>
     <div class="col-4">
       <mat-form-field>
         <mat-label>Visit type</mat-label>
-        <mat-select [(value)]="newStudentType">
+        <mat-select formControlName="visitType">
           <mat-option *ngFor="let option of visitOptions" [value]="option">
             {{option}}
           </mat-option>

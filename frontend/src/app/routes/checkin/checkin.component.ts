@@ -1,50 +1,31 @@
 import { Component, OnInit } from '@angular/core';
+import { Student, StudentsService, VisitType } from '../../services/students-service/students-service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-enum VisitType {
-  INTERNAL = 'INTERNAL',
-  EXTERNAL = 'EXTERNAL'
-}
-
-interface Student {
+interface NewStudentFormState {
   name: string;
-  id: number;
-  visit: VisitType;
-}
-
-let lastStudentId = 0;
-
-function studentId() {
-  return lastStudentId++;
-}
-
-function generateStudent(name: string, visitType: VisitType = VisitType.INTERNAL): Student {
-  return {
-    id: studentId(),
-    name,
-    visit: visitType,
-  };
+  visitType: VisitType;
 }
 
 @Component({
   selector: 'app-checkin',
   templateUrl: './checkin.component.html',
-  styleUrls: ['./checkin.component.scss']
+  styleUrls: ['./checkin.component.scss'],
 })
 export class CheckinComponent implements OnInit {
   VisitType = VisitType;
   visitOptions = Object.values(VisitType);
 
-  students: Student[] = [
-    generateStudent('John Doe'),
-    generateStudent('Alexei Gontar'),
-    generateStudent('Anna'),
-    generateStudent('Micha'),
-  ];
+  students: Student[] = [];
   newStudentType: VisitType = VisitType.INTERNAL;
-  newStudentName: string;
-  constructor() { }
+  newStudent = new FormGroup({
+    name: new FormControl('', Validators.required),
+    visitType: new FormControl(VisitType.INTERNAL),
+  });
+  constructor(private studentsService: StudentsService) { }
 
   ngOnInit() {
+    this.students = this.studentsService.getAllStudents();
   }
 
   showStudents() {
@@ -56,12 +37,15 @@ export class CheckinComponent implements OnInit {
   }
 
   addStudent() {
-    if (this.students.some((student) => student.name === this.newStudentName)) {
+    if (this.students.some((student) => student.name === this.newStudent.value.name)) {
       return;
     }
-    console.log(this.newStudentType);
-    const newStudent: Student = generateStudent(this.newStudentName, this.newStudentType);
+    const values: NewStudentFormState = this.newStudent.value;
+    const newStudent: Student = this.studentsService.createNewStudent(values.name, values.visitType);
     this.students = this.students.concat([newStudent]);
-    this.newStudentName = '';
+    this.newStudent.reset({
+      name: '',
+      visitType: VisitType.INTERNAL,
+    });
   }
 }

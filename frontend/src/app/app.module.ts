@@ -6,8 +6,9 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material';
 import { CheckinComponent } from './routes/checkin/checkin.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { StudentsService } from './services/students-service/students-service';
 
 @NgModule({
   declarations: [
@@ -16,13 +17,16 @@ import { MatSelectModule } from '@angular/material/select';
   ],
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     MatInputModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatSelectModule,
   ],
-  providers: [],
+  providers: [
+    StudentsService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
