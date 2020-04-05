@@ -9,7 +9,25 @@
       </mat-form-field>
     </div>
   </div>
-  <div class="row justify-content-center"><div class="col-auto">Select group</div></div>
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <mat-form-field>
+        <mat-label>Група</mat-label>
+        <input type="text" matInput [formControl]="group" [matAutocomplete]="auto">
+      </mat-form-field>
+
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="renderGroup">
+        <mat-option *ngFor="let option of groups$ | async" [value]="option">
+          {{option.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      Selected group: {{group.value | json}}
+    </div>
+  </div>
   <div class="row justify-content-center">
     <div class="col-auto">Group table</div>
   </div>

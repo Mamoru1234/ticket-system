@@ -11,6 +11,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { StudentsService } from './services/students-service/students-service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { GroupsService } from './services/groups-service/groups-service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { MatNativeDateModule } from '@angular/material/core';
   ],
   imports: [
     MatDatepickerModule,
+    MatAutocompleteModule,
     MatNativeDateModule,
     FormsModule,
     ReactiveFormsModule,
@@ -30,6 +33,7 @@ import { MatNativeDateModule } from '@angular/material/core';
   ],
   providers: [
     StudentsService,
+    GroupsService,
   ],
   bootstrap: [AppComponent]
 })
