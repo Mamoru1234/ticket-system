@@ -1,15 +1,24 @@
 <div class="container">
-  <div class="row justify-content-center"><div class="col-auto">Select time</div></div>
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <mat-form-field>
+        <mat-label>Дата заняття</mat-label>
+        <input matInput [matDatepicker]="picker" [formControl]="lessonDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
   <div class="row justify-content-center"><div class="col-auto">Select group</div></div>
   <div class="row justify-content-center">
     <div class="col-auto">Group table</div>
   </div>
   <div *ngFor="let student of students$ | async" class="row">
-    <div class="col-10">
+    <div class="col-6" style="background-color: red">
       {{student.name}}
     </div>
-    <div class="col-1">{{student.visit == VisitType.INTERNAL}}</div>
-    <div (click)="removeStudent(student.id)" class="col-1">
+    <div class="col-4" style="background-color: green">{{student.visit}}</div>
+    <div (click)="removeStudent(student.id)" class="col-2" style="background-color: blue">
       <i class="material-icons" style="cursor: pointer">
         delete
       </i>

@@ -18,6 +18,7 @@ export class CheckinComponent implements OnInit {
   visitOptions = Object.values(VisitType);
 
   students$: Observable<Student[]>;
+  lessonDate = new FormControl(new Date());
   newStudent = new FormGroup({
     name: new FormControl('', Validators.required),
     visitType: new FormControl(VisitType.INTERNAL),

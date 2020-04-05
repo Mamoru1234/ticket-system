@@ -9,6 +9,8 @@ import { CheckinComponent } from './routes/checkin/checkin.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { StudentsService } from './services/students-service/students-service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { StudentsService } from './services/students-service/students-service';
     CheckinComponent,
   ],
   imports: [
+    MatDatepickerModule,
+    MatNativeDateModule,
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
