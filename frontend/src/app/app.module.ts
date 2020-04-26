@@ -13,11 +13,17 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { GroupsService } from './services/groups-service/groups-service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MainComponent } from './routes/main/main.component';
+import { GroupsComponent } from './routes/groups/groups.component';
+import { StudentsComponent } from './routes/students/students.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CheckinComponent,
+    MainComponent,
+    GroupsComponent,
+    StudentsComponent,
   ],
   imports: [
     MatDatepickerModule,
