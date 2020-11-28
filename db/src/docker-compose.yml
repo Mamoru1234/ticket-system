@@ -1,0 +1,12 @@
+version: '3'
+services:
+  db:
+    image: postgres:13.1-alpine
+    environment:
+      POSTGRES_PASSWORD: super_secret_admin
+      APP_USER_PASSWORD: app_secret
+
+    ports:
+    - 5432:5432
+    volumes:
+    - ./init:/docker-entrypoint-initdb.d:ro
