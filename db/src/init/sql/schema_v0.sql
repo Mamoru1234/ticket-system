@@ -9,18 +9,18 @@ CREATE TABLE users(
 );
 
 CREATE TABLE "studentGroup" (
-  id UUID PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL
 );
 
 CREATE TABLE "studentGroupMembers" (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     "groupId" UUID REFERENCES "studentGroup",
-    "studentId" INT REFERENCES users,
-    PRIMARY KEY ("groupId", "studentId")
+    "studentId" INT REFERENCES users
 );
 
 CREATE TABLE "studentGroupTeachers" (
-   "groupId" UUID REFERENCES "studentGroup",
-   "teacherId" INT REFERENCES users,
-   PRIMARY KEY ("groupId", "teacherId")
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    "groupId" UUID REFERENCES "studentGroup",
+    "teacherId" INT REFERENCES users
 );
