@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { GroupMemberEntity } from './group-member.entity';
+import { UserRole } from '../../constants/user-role.enum';
 
 @Entity('users')
 export class UserEntity {
@@ -12,12 +13,20 @@ export class UserEntity {
   @Column()
   lastName!: string;
 
+  @Column({
+    enum: UserRole,
+  })
+  role!: UserRole;
+
   @Column()
-  role!: string;
+  login!: string;
 
   @Column()
   password!: string;
 
   @OneToMany(() => GroupMemberEntity, 'student')
   participate!: GroupMemberEntity[];
+
+  @OneToMany(() => GroupMemberEntity, 'student')
+  teacher!: GroupMemberEntity[];
 }

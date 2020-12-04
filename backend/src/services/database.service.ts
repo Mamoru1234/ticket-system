@@ -5,6 +5,7 @@ import { Repository } from 'typeorm/repository/Repository';
 import { UserEntity } from '../models/entity/user.entity';
 import { StudentGroupEntity } from '../models/entity/student-group.entity';
 import { GroupMemberEntity } from '../models/entity/group-member.entity';
+import { GroupTeacherEntity } from '../models/entity/group-teacher.entity';
 
 @Service()
 export class DatabaseService {
@@ -19,6 +20,7 @@ export class DatabaseService {
         UserEntity,
         StudentGroupEntity,
         GroupMemberEntity,
+        GroupTeacherEntity,
       ],
     });
   }

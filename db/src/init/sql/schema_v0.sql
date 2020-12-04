@@ -5,6 +5,7 @@ CREATE TABLE users(
   "firstName" TEXT NOT NULL,
   "lastName" TEXT NOT NULL,
   "role" TEXT NOT NULL,
+  "login" TEXT,
   "password" TEXT
 );
 
