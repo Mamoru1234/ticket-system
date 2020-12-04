@@ -14,7 +14,6 @@ export async function main(): Promise<void> {
   logger.info('Db connected');
   const dbInitializer = Container.get(DatabaseInitializerService);
   await dbInitializer.init();
-  console.log('Url: ', url);
 }
 
 main().catch((e) => {
