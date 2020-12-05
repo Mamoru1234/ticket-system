@@ -19,7 +19,7 @@ export class UserEntity {
   role!: UserRole;
 
   @Column()
-  login!: string;
+  email!: string;
 
   @Column()
   password!: string;

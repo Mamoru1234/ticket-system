@@ -1,0 +1,6 @@
+{
+  "watch": ["./src"],
+  "ext": "ts",
+  "delay": 2000,
+  "exec": "tsc -p . && cd build && node ./dist/bin/main.js"
+}

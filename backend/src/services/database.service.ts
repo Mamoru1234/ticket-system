@@ -6,6 +6,7 @@ import { UserEntity } from '../models/entity/user.entity';
 import { StudentGroupEntity } from '../models/entity/student-group.entity';
 import { GroupMemberEntity } from '../models/entity/group-member.entity';
 import { GroupTeacherEntity } from '../models/entity/group-teacher.entity';
+import { APP_DB_HOST, APP_DB_PASS } from '../config';
 
 @Service()
 export class DatabaseService {
@@ -13,9 +14,9 @@ export class DatabaseService {
   async connect(): Promise<void> {
     this.connection = await createConnection({
       type: 'postgres',
-      host: 'localhost',
+      host: APP_DB_HOST,
       username: 'server',
-      password: 'app_secret',
+      password: APP_DB_PASS,
       entities: [
         UserEntity,
         StudentGroupEntity,

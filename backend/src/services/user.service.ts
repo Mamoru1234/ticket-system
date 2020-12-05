@@ -1,25 +1,26 @@
 import { DatabaseService } from './database.service';
 import { UserEntity } from '../models/entity/user.entity';
-import { hash, genSaltSync } from 'bcrypt';
 import { DeepPartial } from 'typeorm';
 import { Service } from 'typedi';
 import { LoggerUtils } from '../utils/LoggerUtils';
+import { createHmac } from 'crypto';
+import { APP_PASS_SECRET } from '../config';
 
 const logger = LoggerUtils.getLogger(__filename);
 
 @Service()
 export class UserService {
-  private readonly salt: string;
   constructor(
     private readonly dbService: DatabaseService,
   ) {
-    this.salt = genSaltSync(10);
-    logger.info('Salt: ', this.salt);
   }
 
   async registerUser(user: DeepPartial<UserEntity>): Promise<UserEntity> {
+    logger.info(`Registering user: ${user.email}`);
     if (user.password) {
-      user.password = await hash(user.password, this.salt);
+      const hash = createHmac('sha512', APP_PASS_SECRET);
+      hash.update(user.password);
+      user.password = hash.digest().toString('base64');
     }
     return this.dbService.getRepository(UserEntity).save(user);
   }

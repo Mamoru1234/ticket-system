@@ -6,7 +6,8 @@
   "scripts": {
     "prebuild": "rm -rf build",
     "build": "tsc -p .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "init": "ts-node src/bin/init.ts",
+    "start": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
     "@types/node": "^14.14.10",
+    "nodemon": "^2.0.6",
     "ts-node": "^9.1.0"
   }
 }
