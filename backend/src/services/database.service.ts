@@ -1,13 +1,18 @@
 import { Service } from 'typedi';
 import { Connection, createConnection } from 'typeorm';
-import { EntityTarget } from 'typeorm/common/EntityTarget';
-import { Repository } from 'typeorm/repository/Repository';
 import { UserEntity } from '../models/entity/user.entity';
 import { StudentGroupEntity } from '../models/entity/student-group.entity';
 import { GroupMemberEntity } from '../models/entity/group-member.entity';
 import { GroupTeacherEntity } from '../models/entity/group-teacher.entity';
 import { APP_DB_HOST, APP_DB_PASS } from '../config';
 import { EntityManager } from 'typeorm/entity-manager/EntityManager';
+import { AppContext } from '../constants/app-context.type';
+import { LoggerUtils } from '../utils/LoggerUtils';
+
+export const QUERY_RUNNER_KEY = '__typeorm_query_runner';
+export const ENTITY_MANAGER_KEY = '__typeorm_entity_manager';
+
+const logger = LoggerUtils.getLogger(__filename);
 
 @Service()
 export class DatabaseService {
@@ -32,15 +37,23 @@ export class DatabaseService {
     }
     return this.connection.transaction(runInTransaction);
   }
-  getRepository<Entity>(target: EntityTarget<Entity>, txn?: EntityManager): Repository<Entity> {
+
+  async getEntityManager(context: AppContext): Promise<EntityManager> {
     if (!this.connection) {
       throw new Error('Db is not connected');
     }
-    if (txn) {
-      return txn.getRepository(target);
+    if (context.serverData[ENTITY_MANAGER_KEY]) {
+      return context.serverData[ENTITY_MANAGER_KEY];
     }
-    return this.connection.getRepository(target);
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.startTransaction();
+    logger.debug('Context transaction started');
+    context.serverData[QUERY_RUNNER_KEY] = queryRunner;
+    const entityManager = this.connection.createEntityManager(queryRunner);
+    context.serverData[ENTITY_MANAGER_KEY] = entityManager;
+    return entityManager;
   }
+
   async close(): Promise<void> {
     if (!this.connection) {
       return;
