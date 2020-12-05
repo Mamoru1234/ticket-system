@@ -7,6 +7,7 @@ import { StudentGroupEntity } from '../models/entity/student-group.entity';
 import { GroupMemberEntity } from '../models/entity/group-member.entity';
 import { GroupTeacherEntity } from '../models/entity/group-teacher.entity';
 import { APP_DB_HOST, APP_DB_PASS } from '../config';
+import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 
 @Service()
 export class DatabaseService {
@@ -25,9 +26,18 @@ export class DatabaseService {
       ],
     });
   }
-  getRepository<Entity>(target: EntityTarget<Entity>): Repository<Entity> {
+  runInTx<T>(runInTransaction: (entityManager: EntityManager) => Promise<T>): Promise<T> {
     if (!this.connection) {
       throw new Error('Db is not connected');
+    }
+    return this.connection.transaction(runInTransaction);
+  }
+  getRepository<Entity>(target: EntityTarget<Entity>, txn?: EntityManager): Repository<Entity> {
+    if (!this.connection) {
+      throw new Error('Db is not connected');
+    }
+    if (txn) {
+      return txn.getRepository(target);
     }
     return this.connection.getRepository(target);
   }
