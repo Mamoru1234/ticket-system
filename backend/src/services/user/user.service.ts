@@ -64,6 +64,9 @@ export class UserService {
     if (!user) {
       throw new Error('User not found');
     }
+    if (user.email) {
+      throw new Error('User already has email');
+    }
     user.email = args.email;
     UserService.setUserPassword(user, 'init');
     return this.userDao.save(txn, user);
