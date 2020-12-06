@@ -2,38 +2,27 @@ import 'reflect-metadata';
 import { LoggerUtils } from '../utils/LoggerUtils';
 import { Container } from 'typedi';
 import { DatabaseService } from '../services/database.service';
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer, AuthenticationError } from 'apollo-server';
 import { typeDefs } from '../type-def.schema';
 import { ContextTransactionPlugin } from '../plugins/context-transaction.plugin';
 import { AppContext } from '../constants/app-context.type';
 import { UserService } from '../services/user.service';
-import { UserRole } from '../constants/user-role.enum';
+import { Request } from 'express';
 
 LoggerUtils.configure();
 const logger = LoggerUtils.getLogger(__filename);
 
-const resolvers = {
-  Query: {
-    users: async (_parent: unknown, _args: unknown, context: AppContext) => {
-      const entityManager = await Container.get(DatabaseService).getEntityManager(context);
-      await Container.get(UserService).registerUser({
-        password: 'user',
-        firstName: 'Anna',
-        lastName: 'Gontar',
-        role: UserRole.STUDENT,
-        email: 'correct_student@mail.com',
-      }, entityManager);
-      const user = await Container.get(UserService).registerUser({
-        password: 'user',
-        firstName: 'Anna',
-        lastName: 'Gontar',
-        role: UserRole.STUDENT,
-        email: 'correct_new_student@mail.com',
-      }, entityManager);
-      return [user];
-    },
+function getUserToken(request: Request): string | undefined {
+  const authHeader = request.headers.authorization;
+  if (!authHeader) {
+    return undefined;
   }
-};
+  const parts = authHeader.split(' ');
+  if (parts.length !== 2 || parts[0] !== 'Bearer') {
+    throw new AuthenticationError('Token invalid');
+  }
+  return parts[1];
+}
 
 export async function main(): Promise<void> {
   logger.info('Starting server...');
@@ -42,8 +31,13 @@ export async function main(): Promise<void> {
   logger.info('Db connected');
   const server = new ApolloServer({
     typeDefs,
-    resolvers,
-    context: () => ({serverData: {}}),
+    resolvers: [Container.get(UserService).resolvers],
+    context: (context): AppContext => {
+      return {
+        serverData: {},
+        userToken: getUserToken(context.req),
+      };
+    },
     plugins: [
       Container.get(ContextTransactionPlugin),
     ],

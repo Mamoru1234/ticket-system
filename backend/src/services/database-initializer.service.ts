@@ -19,55 +19,55 @@ export class DatabaseInitializerService {
 
   async init(): Promise<void> {
     await this.dbService.runInTx(async txn => {
-      await this.userService.registerUser({
+      await this.userService.registerUser(txn, {
         password: 'admin',
         firstName: 'Oleksiy',
         lastName: 'Gontar',
         role: UserRole.ADMIN,
         email: 'admin@mail.com',
-      }, txn);
-      const student1 = await this.userService.registerUser({
+      });
+      const student1 = await this.userService.registerUser(txn, {
         password: 'user',
         firstName: 'Oleksiy',
         lastName: 'Gone',
         role: UserRole.STUDENT,
         email: 'student@mail.com',
-      }, txn);
-      await this.userService.registerUser({
+      });
+      await this.userService.registerUser(txn, {
         password: 'user',
         firstName: 'Anna',
         lastName: 'Gontar',
         role: UserRole.STUDENT,
         email: 'another_student@mail.com',
-      }, txn);
-      const student2 = await this.userService.registerUser({
+      });
+      const student2 = await this.userService.registerUser(txn, {
         firstName: 'Anna',
         lastName: 'Gotta',
         role: UserRole.STUDENT,
         email: 'gotta_student@mail.com',
-      }, txn);
-      const teacher = await this.userService.registerUser({
+      });
+      const teacher = await this.userService.registerUser(txn, {
         firstName: 'Taras',
         lastName: 'Gontar',
         role: UserRole.TEACHER,
         email: 'teacher@test.com',
         password: 'teacher',
-      }, txn);
-      const group = await this.studentGroupDao.save({
+      });
+      const group = await this.studentGroupDao.save(txn, {
         name: 'Test group',
-      }, txn);
-      await this.groupMemberDao.save({
+      });
+      await this.groupMemberDao.save(txn, {
         group,
         student: student1,
-      }, txn);
-      await this.groupMemberDao.save({
+      });
+      await this.groupMemberDao.save(txn, {
         group,
         student: student2,
-      }, txn);
-      await this.groupTeacherDao.save({
+      });
+      await this.groupTeacherDao.save(txn, {
         teacher,
         group,
-      }, txn);
+      });
     });
   }
 }

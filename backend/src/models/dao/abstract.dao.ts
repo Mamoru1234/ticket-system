@@ -1,21 +1,20 @@
 import { EntityTarget } from 'typeorm/common/EntityTarget';
 import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
-import { DeepPartial } from 'typeorm';
-
-export interface TransactionOptions<T> {
-  operationOptions: T;
-  txn: EntityManager;
-}
+import { DeepPartial, FindOneOptions } from 'typeorm';
 
 export abstract class AbstractDao<T> {
   abstract target: EntityTarget<T>;
   
-  find(options: TransactionOptions<FindManyOptions<T>>) {
-    return options.txn.getRepository(this.target).find(options.operationOptions);
+  find(txn: EntityManager, options?: FindManyOptions<T>) {
+    return txn.getRepository(this.target).find(options);
   }
 
-  save(data: DeepPartial<T>, txn: EntityManager) {
+  findOne(txn: EntityManager, options?: FindOneOptions<T>) {
+    return txn.getRepository(this.target).findOne(options);
+  }
+
+  save(txn: EntityManager, data: DeepPartial<T>) {
     return txn.getRepository(this.target).save(data);
   }
 }

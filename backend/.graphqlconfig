@@ -3,10 +3,19 @@
   "schemaPath": "schema.graphql",
   "extensions": {
     "endpoints": {
-      "Default GraphQL Endpoint": {
+      "Admin GraphQL Endpoint": {
         "url": "http://localhost:4000/graphql",
         "headers": {
-          "user-agent": "JS GraphQL"
+          "user-agent": "JS GraphQL",
+          "Authorization": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwiaWF0IjoxNjA3MjQzMzg0fQ.7X9tByup5XMsNCi7vIGq5_iFxACQRo9sqpmpH6wMXPuBpp4198DHs5a4DZa-seipTSvtq6jr-S89dIcZ1-NinQ"
+        },
+        "introspect": false
+      },
+      "Student GraphQL Endpoint": {
+        "url": "http://localhost:4000/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL",
+          "Authorization": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFub3RoZXJfc3R1ZGVudEBtYWlsLmNvbSIsImlhdCI6MTYwNzI0NTM1OX0.cG8oVTf3Ax9eqO3FcKXgrdJkeKbbUpnpmUb2r9cq7pX7X5j4soAuJeBNRFLi8RF6Qu8BNjwcO9f3BU1bwGDoFg"
         },
         "introspect": false
       }
