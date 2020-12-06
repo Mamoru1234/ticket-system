@@ -1,4 +1,4 @@
-import { UserService } from './user.service';
+import { UserService } from './user/user.service';
 import { Service } from 'typedi';
 import { UserRole } from '../constants/user-role.enum';
 import { DatabaseService } from './database.service';
@@ -44,7 +44,11 @@ export class DatabaseInitializerService {
         firstName: 'Anna',
         lastName: 'Gotta',
         role: UserRole.STUDENT,
-        email: 'gotta_student@mail.com',
+      });
+      await this.userService.registerUser(txn, {
+        firstName: 'Micha',
+        lastName: 'Gotta',
+        role: UserRole.STUDENT,
       });
       const teacher = await this.userService.registerUser(txn, {
         firstName: 'Taras',

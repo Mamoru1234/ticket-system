@@ -6,7 +6,7 @@ import { ApolloServer, AuthenticationError } from 'apollo-server';
 import { typeDefs } from '../type-def.schema';
 import { ContextTransactionPlugin } from '../plugins/context-transaction.plugin';
 import { AppContext } from '../constants/app-context.type';
-import { UserService } from '../services/user.service';
+import { UserService } from '../services/user/user.service';
 import { Request } from 'express';
 
 LoggerUtils.configure();

@@ -1,9 +1,6 @@
-query {
-    me {
-        firstName
-        lastName
-        groups {
-            name
-        }
-    }
+mutation {
+  initUser(id: 5, email: "init_correct@mail.com") {
+    email
+    firstName
+  }
 }
