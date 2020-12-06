@@ -24,9 +24,13 @@ export class UserEntity {
   @Column()
   password!: string;
 
-  @OneToMany(() => GroupMemberEntity, 'student')
-  participate!: GroupMemberEntity[];
+  @OneToMany(() => GroupMemberEntity, 'student', {
+    lazy: true,
+  })
+  participate!: Promise<GroupMemberEntity[]>;
 
-  @OneToMany(() => GroupMemberEntity, 'student')
+  @OneToMany(() => GroupMemberEntity, 'student', {
+    lazy: true,
+  })
   teacher!: GroupMemberEntity[];
 }

@@ -23,6 +23,7 @@ export class DatabaseService {
       host: APP_DB_HOST,
       username: 'server',
       password: APP_DB_PASS,
+      logging: true,
       entities: [
         UserEntity,
         StudentGroupEntity,

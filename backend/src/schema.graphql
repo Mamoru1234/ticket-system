@@ -1,6 +1,9 @@
 query {
-    users {
+    me {
         firstName
         lastName
+        groups {
+            name
+        }
     }
 }

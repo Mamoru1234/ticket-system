@@ -18,6 +18,14 @@
           "Authorization": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFub3RoZXJfc3R1ZGVudEBtYWlsLmNvbSIsImlhdCI6MTYwNzI0NTM1OX0.cG8oVTf3Ax9eqO3FcKXgrdJkeKbbUpnpmUb2r9cq7pX7X5j4soAuJeBNRFLi8RF6Qu8BNjwcO9f3BU1bwGDoFg"
         },
         "introspect": false
+      },
+      "Student with groups GraphQL Endpoint": {
+        "url": "http://localhost:4000/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL",
+          "Authorization": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN0dWRlbnRAbWFpbC5jb20iLCJpYXQiOjE2MDcyNDY5MDF9.lhYJvWN4MRQ7wLKQ1NVAc9luSRzVW4BhDR8zD0wgdiMaLXKHpGytq0rCtXW6bqMW10etKDDwaIxRHup5VqjfVw"
+        },
+        "introspect": false
       }
     }
   }

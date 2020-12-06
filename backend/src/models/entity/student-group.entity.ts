@@ -10,9 +10,13 @@ export class StudentGroupEntity {
   @Column()
   name!: string;
 
-  @OneToMany(() => GroupMemberEntity, 'group')
-  members!: GroupMemberEntity[];
+  @OneToMany(() => GroupMemberEntity, 'group', {
+    lazy: true
+  })
+  members!: Promise<GroupMemberEntity[]>;
 
-  @OneToMany(() => GroupTeacherEntity, 'group')
-  teachers!: GroupTeacherEntity[];
+  @OneToMany(() => GroupTeacherEntity, 'group', {
+    lazy: true,
+  })
+  teachers!: Promise<GroupTeacherEntity[]>;
 }

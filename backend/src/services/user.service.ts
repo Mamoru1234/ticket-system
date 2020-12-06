@@ -9,6 +9,7 @@ import { AppContext } from '../constants/app-context.type';
 import { SecurityService } from './security.service';
 import { UserRole } from '../constants/user-role.enum';
 import { DatabaseService } from './database.service';
+import { StudentGroupDao } from '../models/dao/student-group.dao';
 
 const logger = LoggerUtils.getLogger(__filename);
 
@@ -19,10 +20,15 @@ export class UserService {
     private readonly userDao: UserDao,
     private readonly dbService: DatabaseService,
     private readonly securityService: SecurityService,
+    private readonly studentGroupDao: StudentGroupDao,
   ) {
     this.resolvers = {
       Query: {
         users: this.getAllUsers.bind(this),
+        me: this.getCurrentUser.bind(this),
+      },
+      User: {
+        groups: this.getUserGroups.bind(this),
       },
     };
   }
@@ -31,6 +37,16 @@ export class UserService {
     await this.securityService.verifyRoles(context, [UserRole.ADMIN]);
     const txn = await this.dbService.getEntityManager(context);
     return this.userDao.find(txn);
+  }
+
+  getCurrentUser(_parent: unknown, _args: unknown, context: AppContext): Promise<UserEntity> {
+    return this.securityService.getUserFromContext(context);
+  }
+
+  async getUserGroups(parent: UserEntity, _args: unknown, context: AppContext) {
+    const members = await parent.participate;
+    const txn = await this.dbService.getEntityManager(context);
+    return this.studentGroupDao.findAllByMembers(txn, members);
   }
 
   async registerUser(txn: EntityManager, user: DeepPartial<UserEntity>): Promise<UserEntity> {
