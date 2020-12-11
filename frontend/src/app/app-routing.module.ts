@@ -1,27 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CheckinComponent } from './routes/checkin/checkin.component';
-import { MainComponent } from './routes/main/main.component';
-import { GroupsComponent } from './routes/groups/groups.component';
-import { StudentsComponent } from './routes/students/students.component';
-
+import { AuthGuardService } from './services/auth-guard.service';
 
 const routes: Routes = [
   {
     path: '',
-    component: MainComponent,
+    children: [
+      {
+        path: 'groups',
+        loadChildren: () => import('./pages/groups-page/groups-page.module').then(m => m.GroupsPageModule),
+      },
+    ],
+    canActivate: [AuthGuardService],
   },
   {
-    path: 'checkin',
-    component: CheckinComponent,
-  },
-  {
-    path: 'groups',
-    component: GroupsComponent,
-  },
-  {
-    path: 'students',
-    component: StudentsComponent,
+    path: 'login',
+    loadChildren: () => import('./pages/login-page/login-page.module').then((m) => m.LoginPageModule),
   },
 ];
 

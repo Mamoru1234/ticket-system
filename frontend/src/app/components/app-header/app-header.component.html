@@ -1,0 +1,5 @@
+<div class="container">
+  <ng-container *ngIf="items$ | async as items">
+    <div *ngFor="let item of items">{{item.label}}</div>
+  </ng-container>
+</div>
