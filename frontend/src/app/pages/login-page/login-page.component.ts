@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RestApiService } from '../../services/rest-api/rest-api.service';
-import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-login-page',
@@ -16,10 +16,11 @@ export class LoginPageComponent implements OnInit {
     private readonly restApiService: RestApiService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly tokenService: TokenService,
   ) { }
 
   ngOnInit(): void {
-    localStorage.removeItem(environment.tokenKey);
+    this.tokenService.clearToken();
     this.form = this.formBuilder.group({
       email: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required, Validators.minLength(4)]],
@@ -32,7 +33,7 @@ export class LoginPageComponent implements OnInit {
     }
     this.restApiService.login(this.form.value).subscribe({
       next: (response) => {
-        localStorage.setItem(environment.tokenKey, response.token);
+        this.tokenService.setToken(response.token);
         const redirect = this.route.snapshot.queryParams.redirect;
         if (redirect) {
           // noinspection JSIgnoredPromiseFromCall

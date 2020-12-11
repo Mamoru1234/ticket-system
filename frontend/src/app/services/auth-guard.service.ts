@@ -1,6 +1,6 @@
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,13 +8,14 @@ import { environment } from '../../environments/environment';
 export class AuthGuardService implements CanActivate {
   constructor(
     private readonly router: Router,
+    private readonly tokenService: TokenService,
   ) {
   }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-    const token = localStorage.getItem(environment.tokenKey);
+    const token = this.tokenService.getToken();
     if (token) {
       return true;
     }
