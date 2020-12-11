@@ -1,22 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RestApiService } from '../../services/rest-api/rest-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TokenService } from '../../services/token.service';
+import { BehaviorSubject } from 'rxjs';
+import { FetchService, FetchStatus } from '../../services/fetch.service';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss']
+  styleUrls: ['./login-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [FetchService],
 })
 export class LoginPageComponent implements OnInit {
   form!: FormGroup;
+  showComponent$ = new BehaviorSubject(true);
+  isLoading$ = this.fetchService.isInStatus(FetchStatus.IN_PROGRESS);
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly restApiService: RestApiService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly tokenService: TokenService,
+    private readonly fetchService: FetchService,
   ) { }
 
   ngOnInit(): void {
@@ -31,7 +38,7 @@ export class LoginPageComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    this.restApiService.login(this.form.value).subscribe({
+    this.fetchService.fetch(this.restApiService.login(this.form.value)).subscribe({
       next: (response) => {
         this.tokenService.setToken(response.token);
         const redirect = this.route.snapshot.queryParams.redirect;
@@ -44,5 +51,9 @@ export class LoginPageComponent implements OnInit {
         console.log(e);
       },
     });
+  }
+
+  toggle(): void {
+    this.showComponent$.next(!this.showComponent$.getValue());
   }
 }
