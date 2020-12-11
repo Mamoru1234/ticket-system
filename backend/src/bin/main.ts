@@ -2,17 +2,21 @@ import 'reflect-metadata';
 import { LoggerUtils } from '../utils/LoggerUtils';
 import { Container } from 'typedi';
 import { DatabaseService } from '../services/database.service';
-import { ApolloServer, AuthenticationError } from 'apollo-server';
+import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import { typeDefs } from '../type-def.schema';
 import { ContextTransactionPlugin } from '../plugins/context-transaction.plugin';
 import { AppContext } from '../constants/app-context.type';
 import { UserService } from '../services/user/user.service';
-import { Request } from 'express';
+import express from 'express';
+import { SERVER_PORT } from '../config';
+import { loggerMiddleware } from '../middlewares/logger.middleware';
+import { AuthRoute } from '../routes/auth.route';
+import cors from 'cors';
 
 LoggerUtils.configure();
 const logger = LoggerUtils.getLogger(__filename);
 
-function getUserToken(request: Request): string | undefined {
+function getUserToken(request: express.Request): string | undefined {
   const authHeader = request.headers.authorization;
   if (!authHeader) {
     return undefined;
@@ -25,6 +29,12 @@ function getUserToken(request: Request): string | undefined {
 }
 
 export async function main(): Promise<void> {
+  const app = express();
+  if (process.env.NODE_ENV !== 'production') {
+    app.use(cors());
+  }
+  app.use(loggerMiddleware);
+  app.use('/auth', Container.get(AuthRoute).init());
   logger.info('Starting server...');
   const dbService = Container.get(DatabaseService);
   await dbService.connect();
@@ -42,8 +52,12 @@ export async function main(): Promise<void> {
       Container.get(ContextTransactionPlugin),
     ],
   });
-  const { url } = await server.listen();
-  logger.info(`Server url: ${url}`);
+  server.applyMiddleware({
+    app,
+  });
+  app.listen(SERVER_PORT, () => {
+    logger.info('Server listening: ', SERVER_PORT);
+  })
 }
 
 main().catch((e) => {

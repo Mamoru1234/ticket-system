@@ -6,4 +6,5 @@ export interface CreateUserInput {
 export interface InitUserInput {
   id: number;
   email: string;
+  password: string;
 }

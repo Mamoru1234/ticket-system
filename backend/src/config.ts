@@ -1,3 +1,4 @@
+export const SERVER_PORT = +(process.env.SERVER_PORT)! || 4000;
 export const APP_PASS_SECRET = process.env.APP_PASS_SECRET || 'super_pass';
 export const APP_TOKEN_SECRET = process.env.APP_TOKEN_SECRET || 'super__secret_token';
 

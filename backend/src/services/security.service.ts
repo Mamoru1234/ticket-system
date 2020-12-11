@@ -3,7 +3,7 @@ import { UserDao } from '../models/dao/user.dao';
 import { AppContext } from '../constants/app-context.type';
 import { DatabaseService } from './database.service';
 import { UserEntity } from '../models/entity/user.entity';
-import { AuthenticationError } from 'apollo-server';
+import { AuthenticationError } from 'apollo-server-express';
 import { TokenUtils } from '../utils/TokenUtils';
 import { LoggerUtils } from '../utils/LoggerUtils';
 import { TokenData } from '../constants/token-data.type';

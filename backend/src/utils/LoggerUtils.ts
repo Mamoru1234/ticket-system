@@ -1,4 +1,4 @@
-import { getLogger, Logger, configure } from 'log4js';
+import { configure, getLogger, Logger } from 'log4js';
 import { join, relative } from 'path';
 
 export class LoggerUtils {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppHeaderStore, HeaderItem } from '../../stores/app-header.store';
 import { Observable } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
+import { Select } from '@ngxs/store';
 
 @Component({
   selector: 'app-header',

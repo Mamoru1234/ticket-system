@@ -8,4 +8,4 @@ const routes: Routes = [
   },
 ];
 
-export const LoginPageRoutes = RouterModule.forChild(routes);
+export const GroupsPageRoutes = RouterModule.forChild(routes);

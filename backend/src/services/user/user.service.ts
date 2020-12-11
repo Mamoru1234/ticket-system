@@ -2,8 +2,6 @@ import { UserEntity } from '../../models/entity/user.entity';
 import { DeepPartial, EntityManager } from 'typeorm';
 import { Service } from 'typedi';
 import { LoggerUtils } from '../../utils/LoggerUtils';
-import { createHmac } from 'crypto';
-import { APP_PASS_SECRET } from '../../config';
 import { UserDao } from '../../models/dao/user.dao';
 import { AppContext } from '../../constants/app-context.type';
 import { SecurityService } from '../security.service';
@@ -11,6 +9,7 @@ import { UserRole } from '../../constants/user-role.enum';
 import { DatabaseService } from '../database.service';
 import { StudentGroupDao } from '../../models/dao/student-group.dao';
 import { CreateUserInput, InitUserInput } from './user.input';
+import { PasswordService } from '../password.service';
 
 const logger = LoggerUtils.getLogger(__filename);
 
@@ -22,6 +21,7 @@ export class UserService {
     private readonly dbService: DatabaseService,
     private readonly securityService: SecurityService,
     private readonly studentGroupDao: StudentGroupDao,
+    private readonly passwordService: PasswordService,
   ) {
     this.resolvers = {
       Query: {
@@ -68,7 +68,9 @@ export class UserService {
       throw new Error('User already has email');
     }
     user.email = args.email;
-    UserService.setUserPassword(user, 'init');
+    if (args.password) {
+      user.password = this.passwordService.createPassword(args.password);
+    }
     return this.userDao.save(txn, user);
   }
 
@@ -85,14 +87,8 @@ export class UserService {
   async registerUser(txn: EntityManager, user: DeepPartial<UserEntity>): Promise<UserEntity> {
     logger.info(`Registering user: ${user.firstName} ${user.lastName}`);
     if (user.password) {
-      UserService.setUserPassword(user, user.password);
+      user.password = this.passwordService.createPassword(user.password);
     }
     return this.userDao.save(txn, user);
-  }
-
-  private static setUserPassword(user: DeepPartial<UserEntity>, password: string) {
-    const hash = createHmac('sha512', APP_PASS_SECRET);
-    hash.update(password);
-    user.password = hash.digest().toString('base64');
   }
 }

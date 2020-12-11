@@ -6,17 +6,18 @@ import { AppComponent } from './app.component';
 import { AppHeaderModule } from './components/app-header/app-header.module';
 import { NgxsModule } from '@ngxs/store';
 import { AppHeaderStore } from './stores/app-header.store';
-import { TokenStore } from './stores/token.store';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     AppHeaderModule,
-    NgxsModule.forRoot([AppHeaderStore, TokenStore], {
+    NgxsModule.forRoot([AppHeaderStore], {
       developmentMode: true,
     })
   ],

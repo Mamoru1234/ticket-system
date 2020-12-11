@@ -1,6 +1,5 @@
-mutation {
-  initUser(id: 5, email: "init_correct@mail.com") {
-    email
+query {
+  me {
     firstName
   }
 }
