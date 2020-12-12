@@ -12,6 +12,7 @@ import { SERVER_PORT } from '../config';
 import { loggerMiddleware } from '../middlewares/logger.middleware';
 import { AuthRoute } from '../routes/auth.route';
 import cors from 'cors';
+import { StudentGroupService } from '../services/group/student-group.service';
 
 LoggerUtils.configure();
 const logger = LoggerUtils.getLogger(__filename);
@@ -41,7 +42,7 @@ export async function main(): Promise<void> {
   logger.info('Db connected');
   const server = new ApolloServer({
     typeDefs,
-    resolvers: [Container.get(UserService).resolvers],
+    resolvers: [Container.get(UserService).resolvers, Container.get(StudentGroupService).resolvers],
     context: (context): AppContext => {
       return {
         serverData: {},

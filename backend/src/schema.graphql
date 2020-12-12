@@ -1,5 +1,6 @@
-query {
-  me {
-    firstName
+mutation {
+  addStudentToGroup(groupId: "b6e6bc49-f08e-4a22-b879-ea6b3153e314", studentId: 5) {
+    name
+    id
   }
 }

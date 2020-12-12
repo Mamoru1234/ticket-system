@@ -22,6 +22,8 @@ export const typeDefs = gql`
   
   type Mutation {
     createUser(firstName: String!, lastName: String!): User!
+    createGroup(name: String!): Group!
+    addStudentToGroup(studentId: Int!, groupId: String!): Group!
     initUser(id: Int!, email: String!): User!
   }
 `;

@@ -17,4 +17,7 @@ export class GroupMemberEntity {
   @ManyToOne(() => UserEntity, 'participate')
   @JoinColumn()
   student!: UserEntity;
+
+  @Column('studentId')
+  studentId!: string;
 }
