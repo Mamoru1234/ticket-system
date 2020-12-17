@@ -8,6 +8,8 @@ import { NgxsModule } from '@ngxs/store';
 import { AppHeaderStore } from './stores/app-header.store';
 import { HttpClientModule } from '@angular/common/http';
 import { LandingModule } from './components/landing/landing.module';
+import { GraphQLModule } from './graphql/graphql.module';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -19,8 +21,9 @@ import { LandingModule } from './components/landing/landing.module';
     AppRoutingModule,
     LandingModule,
     NgxsModule.forRoot([AppHeaderStore], {
-      developmentMode: true,
-    })
+      developmentMode: !environment.production,
+    }),
+    GraphQLModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

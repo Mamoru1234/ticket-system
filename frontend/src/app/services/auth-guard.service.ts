@@ -1,13 +1,14 @@
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { TokenService } from './token.service';
+import { LoginPageService } from './login-page.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuardService implements CanActivate {
   constructor(
-    private readonly router: Router,
+    private readonly loginPageService: LoginPageService,
     private readonly tokenService: TokenService,
   ) {
   }
@@ -19,12 +20,7 @@ export class AuthGuardService implements CanActivate {
     if (token) {
       return true;
     }
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['/login'], {
-      queryParams: {
-        redirect: window.location.pathname,
-      },
-    });
+    this.loginPageService.redirectToLoginPage();
     return false;
   }
 }
