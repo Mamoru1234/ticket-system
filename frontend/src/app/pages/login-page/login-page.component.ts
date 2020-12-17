@@ -16,7 +16,8 @@ import { FetchService, FetchStatus } from '../../services/fetch.service';
 export class LoginPageComponent implements OnInit {
   form!: FormGroup;
   showComponent$ = new BehaviorSubject(true);
-  isLoading$ = this.fetchService.isInStatus(FetchStatus.IN_PROGRESS);
+  loginFetchWrapper = this.fetchService.createWrapper();
+  isLoading$ = this.loginFetchWrapper.isInStatus(FetchStatus.IN_PROGRESS);
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly restApiService: RestApiService,
@@ -38,7 +39,7 @@ export class LoginPageComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    this.fetchService.fetch(this.restApiService.login(this.form.value)).subscribe({
+    this.loginFetchWrapper.fetch(this.restApiService.login(this.form.value)).subscribe({
       next: (response) => {
         this.tokenService.setToken(response.token);
         const redirect = this.route.snapshot.queryParams.redirect;

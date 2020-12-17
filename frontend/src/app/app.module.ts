@@ -7,6 +7,7 @@ import { AppHeaderModule } from './components/app-header/app-header.module';
 import { NgxsModule } from '@ngxs/store';
 import { AppHeaderStore } from './stores/app-header.store';
 import { HttpClientModule } from '@angular/common/http';
+import { LandingModule } from './components/landing/landing.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    AppHeaderModule,
+    LandingModule,
     NgxsModule.forRoot([AppHeaderStore], {
       developmentMode: true,
     })
