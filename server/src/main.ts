@@ -1,10 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { AuthService } from './modules/auth/auth.service';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const service = app.get(AuthService);
+  const configService = app.get(ConfigService);
+  if (configService.get('NODE_ENV') === 'development') {
+    app.enableCors();
+  }
   await app.listen(3000);
 }
 

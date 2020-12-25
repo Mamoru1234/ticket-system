@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AppHeaderModule } from './components/app-header/app-header.module';
 import { NgxsModule } from '@ngxs/store';
 import { AppHeaderStore } from './stores/app-header.store';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LandingModule } from './components/landing/landing.module';
-import { GraphQLModule } from './graphql/graphql.module';
 import { environment } from '../environments/environment';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+import { UserStore } from './stores/user.store';
 
 @NgModule({
   declarations: [
@@ -20,12 +20,17 @@ import { environment } from '../environments/environment';
     BrowserModule,
     AppRoutingModule,
     LandingModule,
-    NgxsModule.forRoot([AppHeaderStore], {
+    NgxsModule.forRoot([AppHeaderStore, UserStore], {
       developmentMode: !environment.production,
     }),
-    GraphQLModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Apollo, gql } from 'apollo-angular';
 
 @Component({
   selector: 'app-users-page',
@@ -8,17 +7,7 @@ import { Apollo, gql } from 'apollo-angular';
 })
 export class UsersPageComponent implements OnInit {
   constructor(
-    private readonly apollo: Apollo,
   ) { }
-
-  users$ = this.apollo.watchQuery({
-    query: gql`{
-      users {
-        firstName
-        lastName
-      }
-    }`
-  }).valueChanges;
 
   ngOnInit(): void {
   }

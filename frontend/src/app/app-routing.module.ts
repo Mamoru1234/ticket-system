@@ -1,21 +1,28 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuardService } from './services/auth-guard.service';
+import { UserRoleGuard } from './guards/user-role.guard';
+import { UserRole } from './services/rest-api/dto/user.endpoint';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     children: [
       {
-        path: 'groups',
-        loadChildren: () => import('./pages/groups-page/groups-page.module').then(m => m.GroupsPageModule),
-      },
-      {
-        path: 'users',
-        loadChildren: () => import('./pages/users-page/users-page.module').then(m => m.UsersPageModule),
+        path: 'admin',
+        children: [
+          {
+            path: 'users',
+            loadChildren: () => import('./pages/users-page/users-page.module').then(m => m.UsersPageModule),
+          },
+        ],
+        canActivate: [UserRoleGuard],
+        data: {
+          requiredRole: UserRole.ADMIN,
+        },
       },
     ],
-    canActivate: [AuthGuardService],
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',

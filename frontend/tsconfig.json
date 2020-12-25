@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "sourceRoot": "./src",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,

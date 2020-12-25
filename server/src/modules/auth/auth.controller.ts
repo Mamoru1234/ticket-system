@@ -4,6 +4,9 @@ import { User } from '../../decorators/user.decorator';
 import { UserEntity } from '../database/entity/user.entity';
 import { TokenResponse } from './dto/token.response';
 import { AuthService } from './auth.service';
+import { plainToClass } from 'class-transformer';
+import { UserResponse } from './dto/user.response';
+import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.options';
 
 @Controller('/api/v1/auth')
 export class AuthController {
@@ -22,7 +25,7 @@ export class AuthController {
   @Get('me')
   async getMe(
     @User() user: UserEntity
-  ): Promise<UserEntity> {
-    return user;
+  ): Promise<UserResponse> {
+    return plainToClass(UserResponse, user, DEFAULT_TRANSFORM_OPTIONS);
   }
 }

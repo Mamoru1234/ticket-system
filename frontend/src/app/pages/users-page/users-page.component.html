@@ -1,6 +1,3 @@
-<app-landing *ngIf="users$ | async as users">
-  <div *ngIf="users.loading">Loading...</div>
-  <div class="row">
-    {{users.data | json}}
-  </div>
+<app-landing >
+  <p>Users page</p>
 </app-landing>
