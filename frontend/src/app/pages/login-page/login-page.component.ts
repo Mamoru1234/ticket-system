@@ -43,10 +43,11 @@ export class LoginPageComponent implements OnInit {
       next: (response) => {
         this.tokenService.setToken(response.token);
         const redirect = this.route.snapshot.queryParams.redirect;
-        if (redirect) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate([redirect]);
-        }
+        const targetUrl = redirect
+          ? redirect
+          : '/';
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate([targetUrl]);
       },
       error: (e) => {
         console.log(e);
