@@ -4,7 +4,7 @@ import { LoginBody, LoginResponse } from './dto/login.endpoint';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { delay } from 'rxjs/operators';
-import { UserResponse } from './dto/user.endpoint';
+import { CreateUserPayload, UserResponse } from './dto/user.endpoint';
 
 @Injectable({
   providedIn: 'root',
@@ -27,5 +27,9 @@ export class RestApiService {
 
   getAllUsers(): Observable<UserResponse[]> {
     return this.http.get<UserResponse[]>(`${environment.apiUrl}/users/admin/all`);
+  }
+
+  createUser(data: CreateUserPayload): Observable<UserResponse> {
+    return this.http.post<UserResponse>(`${environment.apiUrl}/users/admin/create`, data);
   }
 }

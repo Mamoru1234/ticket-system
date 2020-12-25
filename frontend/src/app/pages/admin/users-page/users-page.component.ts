@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FetchService } from '../../services/fetch.service';
-import { RestApiService } from '../../services/rest-api/rest-api.service';
 import { BehaviorSubject } from 'rxjs';
-import { UserResponse } from '../../services/rest-api/dto/user.endpoint';
+import { FetchService } from '../../../services/fetch.service';
+import { RestApiService } from '../../../services/rest-api/rest-api.service';
+import { UserResponse } from '../../../services/rest-api/dto/user.endpoint';
 
 @Component({
   selector: 'app-users-page',

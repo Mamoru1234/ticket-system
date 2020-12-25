@@ -1,6 +1,14 @@
 <app-landing >
   <div>
     <h3>Users</h3>
+    <div class="d-flex justify-content-end py-1">
+      <button
+        class="btn btn-primary"
+        [routerLink]="'/admin/create-user'"
+      >
+        Add user
+      </button>
+    </div>
     <div
       class="row"
       *ngIf="users$ | async as users"

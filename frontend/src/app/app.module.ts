@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgxsModule } from '@ngxs/store';
-import { AppHeaderStore } from './stores/app-header.store';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LandingModule } from './components/landing/landing.module';
 import { environment } from '../environments/environment';
@@ -20,7 +19,7 @@ import { UserStore } from './stores/user.store';
     BrowserModule,
     AppRoutingModule,
     LandingModule,
-    NgxsModule.forRoot([AppHeaderStore, UserStore], {
+    NgxsModule.forRoot([UserStore], {
       developmentMode: !environment.production,
     }),
   ],

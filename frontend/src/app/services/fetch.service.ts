@@ -38,6 +38,10 @@ export class FetchWrapper {
 export class FetchService implements OnDestroy {
   private childWrappers: FetchWrapper[] = [];
 
+  static httpErrorMapper(e: any): any {
+    return e ? e.error : e;
+  }
+
   createWrapper(): FetchWrapper {
     const wrapper = new FetchWrapper();
     this.childWrappers.push(wrapper);

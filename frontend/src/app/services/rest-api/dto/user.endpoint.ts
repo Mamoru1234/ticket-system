@@ -13,5 +13,11 @@ export interface UserResponse {
 
   role: UserRole;
 
-  email: string;
+  email?: string;
+}
+
+export interface CreateUserPayload {
+  firstName: string;
+  lastName: string;
+  role: string;
 }

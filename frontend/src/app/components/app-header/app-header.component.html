@@ -1,6 +1,10 @@
 <div class="d-flex justify-items-between py-1">
   <div *ngIf="items$ | async as items" class="flex-grow-1">
-    <div *ngFor="let item of items">{{item.label}}</div>
+    <div
+      *ngFor="let item of items"
+      [routerLink]="item.url"
+      class="p-1"
+    >{{item.label}}</div>
   </div>
   <div>
     <button

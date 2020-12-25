@@ -14,16 +14,7 @@ const routes: Routes = [
       },
       {
         path: 'admin',
-        children: [
-          {
-            path: 'users',
-            loadChildren: () => import('./pages/users-page/users-page.module').then(m => m.UsersPageModule),
-          },
-        ],
-        canActivate: [UserRoleGuard],
-        data: {
-          requiredRole: UserRole.ADMIN,
-        },
+        loadChildren: () => import('./pages/admin/admin.module').then((m) => m.AdminModule),
       },
     ],
     canActivate: [AuthGuard],

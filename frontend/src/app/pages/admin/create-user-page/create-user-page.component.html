@@ -1,0 +1,40 @@
+<app-landing>
+  <div>
+    <h3>Create new user</h3>
+    <div
+      *ngIf="formError$ | async as error"
+      class="alert alert-danger"
+      role="alert"
+    >
+      {{error}}
+    </div>
+    <div
+      *ngIf="error$ | async as error"
+      class="alert alert-danger"
+      role="alert"
+    >
+      Server error: {{error.message}}
+    </div>
+    <form [formGroup]="createUserForm" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label for="newUserFirstName" class="form-label">Firstname</label>
+        <input type="text" class="form-control" id="newUserFirstName" formControlName="firstName">
+      </div>
+      <div class="mb-3">
+        <label for="newUserLastName" class="form-label">Lastname</label>
+        <input type="text" class="form-control" id="newUserLastName" formControlName="lastName">
+      </div>
+      <div class="mb-3">
+        <label for="newUserRole" class="form-label">Role</label>
+        <input type="text" class="form-control" id="newUserRole" formControlName="role">
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary w-100"
+        [disabled]="loading$ | async"
+      >
+        Create user
+      </button>
+    </form>
+  </div>
+</app-landing>
