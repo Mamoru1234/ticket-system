@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserDao } from '../database/dao/user.dao';
 import { Connection } from 'typeorm';
@@ -7,11 +7,8 @@ import { UserEntity } from '../database/entity/user.entity';
 import { TokenResponse } from './dto/token.response';
 import { JwtService } from '@nestjs/jwt';
 import { stringify } from 'querystring';
-
-export enum TokenType {
-  AUTH = 'AUTH',
-  SET_PASSWORD = 'SET_PASSWORD',
-}
+import { SetPasswordPayload } from './dto/set-password.payload';
+import { TokenPayload, TokenType } from './dto/token.payload';
 
 @Injectable()
 export class AuthService {
@@ -35,7 +32,7 @@ export class AuthService {
   }
 
   async createToken(user: UserEntity): Promise<TokenResponse> {
-    const payload = {
+    const payload: TokenPayload = {
       sub: user.id,
       username: user.email,
       tokenType: TokenType.AUTH,
@@ -48,7 +45,7 @@ export class AuthService {
 
   async createSetPasswordLink(targetUser: UserEntity): Promise<string> {
     const setPasswordUrl = this.configService.get('SET_PASSWORD_URL');
-    const payload = {
+    const payload: TokenPayload = {
       sub: targetUser.id,
       username: targetUser.email,
       tokenType: TokenType.SET_PASSWORD,
@@ -60,5 +57,34 @@ export class AuthService {
       token: setPasswordToken,
     })
     return `${setPasswordUrl}?${params}`;
+  }
+
+  async setPassword(data: SetPasswordPayload): Promise<void> {
+    const payload = await this.verifyAsync(data.token);
+    if (!payload) {
+      throw new BadRequestException('Wrong token');
+    }
+    if (payload.tokenType !== TokenType.SET_PASSWORD) {
+      throw new BadRequestException('Invalid token type');
+    }
+    return this.connection.transaction(async txn => {
+      const user = await this.userDao.findOne(txn, {
+        where: {
+          id: payload.sub,
+        },
+      });
+      if (user.email !== payload.username) {
+        throw new BadRequestException('User email changed');
+      }
+      user.password = this.hashPassword(user.email, data.password);
+      await this.userDao.save(txn, user);
+    });
+  }
+
+  verifyAsync(token: string): Promise<TokenPayload> {
+    return this.jwtService.verifyAsync(token).catch((e) => {
+      console.error('Verify token error: ', e);
+      return null;
+    })
   }
 }

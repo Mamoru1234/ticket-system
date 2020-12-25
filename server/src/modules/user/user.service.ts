@@ -44,6 +44,9 @@ export class UserService {
       if (!user) {
         throw new BadRequestException(`User with id: ${payload.id} not found`);
       }
+      if (user.email) {
+        throw new BadRequestException(`User with id: ${payload.id} already has email`);
+      }
       user.email = payload.email;
       return this.userDao.save(tx, user);
     });

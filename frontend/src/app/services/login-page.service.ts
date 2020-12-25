@@ -13,7 +13,7 @@ export class LoginPageService {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/login'], {
       queryParams: {
-        redirect: window.location.pathname,
+        redirect: this.router.url,
       },
     });
   }

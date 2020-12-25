@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../../decorators/user.decorator';
 import { UserEntity } from '../database/entity/user.entity';
@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { plainToClass } from 'class-transformer';
 import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.options';
 import { UserResponse } from '../../dto/user.response';
+import { SetPasswordPayload } from './dto/set-password.payload';
 
 @Controller('/api/v1/auth')
 export class AuthController {
@@ -19,6 +20,13 @@ export class AuthController {
   @Post('login')
   login(@User() user: UserEntity): Promise<TokenResponse> {
     return this.authService.createToken(user);
+  }
+
+  @Put('set-password')
+  setPassword(
+    @Body() data: SetPasswordPayload,
+  ): Promise<void> {
+    return this.authService.setPassword(data);
   }
 
   @UseGuards(AuthGuard('jwt'))

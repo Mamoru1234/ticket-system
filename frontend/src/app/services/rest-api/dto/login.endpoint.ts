@@ -6,3 +6,8 @@ export interface LoginBody {
 export interface LoginResponse {
   token: string;
 }
+
+export interface SetPasswordPayload {
+  token: string;
+  password: string;
+}

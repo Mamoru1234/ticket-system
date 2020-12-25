@@ -5,7 +5,7 @@ import { RestApiService } from '../../../services/rest-api/rest-api.service';
 import { BehaviorSubject, merge, Observable } from 'rxjs';
 import { UserResponse } from '../../../services/rest-api/dto/user.endpoint';
 import { FormBuilder, Validators } from '@angular/forms';
-import { map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-activate-user-page',
@@ -66,7 +66,9 @@ export class ActivateUserPageComponent implements OnInit {
     this.activateUserWrapper.fetch(this.restApiService.activateUser({
       email: this.activateUserForm.value.email,
       id: this.getUserId(),
-    })).subscribe({
+    })).pipe(
+      finalize(() => this.activateUserForm.enable())
+    ).subscribe({
       next: user => this.targetUser$.next(user),
     });
   }
