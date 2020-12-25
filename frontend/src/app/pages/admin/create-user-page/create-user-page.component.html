@@ -15,6 +15,13 @@
     >
       Server error: {{error.message}}
     </div>
+    <div
+      *ngIf="createdUser$ | async as createdUser"
+      class="alert alert-secondary"
+      role="alert"
+    >
+      User created: {{createdUser.lastName}} {{createdUser.firstName}} {{createdUser.id}}
+    </div>
     <form [formGroup]="createUserForm" (ngSubmit)="submit()">
       <div class="mb-3">
         <label for="newUserFirstName" class="form-label">Firstname</label>

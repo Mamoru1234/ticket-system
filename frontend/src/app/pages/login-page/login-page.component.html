@@ -1,19 +1,20 @@
-<div class="container pt-5" [formGroup]="form">
-  <div class="input-group pt-2">
-    <!--suppress HtmlFormInputWithoutLabel -->
-    <input type="text" class="form-control" placeholder="Login" formControlName="email">
-  </div>
-  <div class="input-group pt-2">
-    <!--suppress HtmlFormInputWithoutLabel -->
-    <input type="password" class="form-control" placeholder="Password"  formControlName="password">
-  </div>
-  <div *ngIf="isLoading$ | async">Please login handling</div>
-  <div class="pt-2">
-    <button
-      type="button"
-      class="btn btn-primary btn-block"
-      (click)="login()"
-      [disabled]="isLoading$ | async"
-    >Login</button>
-  </div>
+<div class="container pt-5">
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <div class="input-group pt-2">
+      <!--suppress HtmlFormInputWithoutLabel -->
+      <input type="text" class="form-control" placeholder="Login" formControlName="email">
+    </div>
+    <div class="input-group pt-2">
+      <!--suppress HtmlFormInputWithoutLabel -->
+      <input type="password" class="form-control" placeholder="Password"  formControlName="password">
+    </div>
+    <div *ngIf="isLoading$ | async">Please login handling</div>
+    <div class="pt-2">
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="isLoading$ | async"
+      >Login</button>
+    </div>
+  </form>
 </div>

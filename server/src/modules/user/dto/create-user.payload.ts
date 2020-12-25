@@ -3,7 +3,7 @@ import { IsDefined, IsEnum, IsString } from 'class-validator';
 
 export class CreateUserPayload {
   @IsString()
-  fistName: string;
+  firstName: string;
 
   @IsString()
   lastName: string;

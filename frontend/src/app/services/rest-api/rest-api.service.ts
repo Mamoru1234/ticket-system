@@ -17,7 +17,7 @@ export class RestApiService {
   login(body: LoginBody): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, body)
       .pipe(
-        delay(5000),
+        delay(1000),
       );
   }
 
