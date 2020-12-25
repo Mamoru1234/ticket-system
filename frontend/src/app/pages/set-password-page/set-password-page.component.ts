@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { TokenService } from '../../services/token.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { FetchService, FetchStatus } from '../../services/fetch.service';
 import { RestApiService } from '../../services/rest-api/rest-api.service';
 import { map } from 'rxjs/operators';
 
-const passwordMatch = (control: FormGroup): ValidationErrors | null => {
+const passwordMatch = (control: AbstractControl): ValidationErrors | null => {
   const password = control.get('password');
   const confirmPassword = control.get('confirmPassword');
 
