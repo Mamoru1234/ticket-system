@@ -1,3 +1,16 @@
 <app-landing >
-  <p>Users page</p>
+  <div>
+    <h3>Users</h3>
+    <div
+      class="row"
+      *ngIf="users$ | async as users"
+    >
+      <div
+        class="col-3 col-sm-12 col-xs-12 card"
+        *ngFor="let user of users"
+      >
+        <div class="card-body">{{user.lastName}} {{user.firstName}}</div>
+      </div>
+    </div>
+  </div>
 </app-landing>

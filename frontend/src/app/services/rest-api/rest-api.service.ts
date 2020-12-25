@@ -24,4 +24,8 @@ export class RestApiService {
   currentUser(): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${environment.apiUrl}/auth/me`);
   }
+
+  getAllUsers(): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>(`${environment.apiUrl}/users/admin/all`);
+  }
 }

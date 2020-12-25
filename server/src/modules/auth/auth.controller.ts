@@ -5,8 +5,8 @@ import { UserEntity } from '../database/entity/user.entity';
 import { TokenResponse } from './dto/token.response';
 import { AuthService } from './auth.service';
 import { plainToClass } from 'class-transformer';
-import { UserResponse } from './dto/user.response';
 import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.options';
+import { UserResponse } from '../../dto/user.response';
 
 @Controller('/api/v1/auth')
 export class AuthController {

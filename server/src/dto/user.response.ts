@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer/decorators';
-import { UserRole } from '../../../constants/user-role.enum';
+import { UserRole } from '../constants/user-role.enum';
 
 export class UserResponse {
   @Expose()
