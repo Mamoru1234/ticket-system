@@ -5,10 +5,13 @@ import { Connection } from 'typeorm';
 import { CreateUserPayload } from './dto/create-user.payload';
 import { ActivateUserPayload } from './dto/activate-user.payload';
 import { MAIL_PROVIDER_TOKEN, MailProvider } from '../mail/provider/mail-provider.interface';
+import { AuthService } from '../auth/auth.service';
+import { activateUserMail } from './mail/activate-user.mail';
 
 @Injectable()
 export class UserService {
   constructor(
+    private readonly authService: AuthService,
     private readonly userDao: UserDao,
     private readonly connection: Connection,
     @Inject(MAIL_PROVIDER_TOKEN) private readonly mailProvider: MailProvider,
@@ -17,6 +20,14 @@ export class UserService {
 
   findAll(): Promise<UserEntity[]> {
     return this.userDao.find(this.connection.manager);
+  }
+
+  getById(userId: number): Promise<UserEntity> {
+    return this.userDao.findOne(this.connection.manager, {
+      where: {
+        id: userId,
+      },
+    });
   }
 
   createUser(payload: CreateUserPayload): Promise<UserEntity> {
@@ -36,10 +47,11 @@ export class UserService {
       user.email = payload.email;
       return this.userDao.save(tx, user);
     });
+    const resetLink = await this.authService.createSetPasswordLink(activatedUser);
     await this.mailProvider.sendMail({
       targetEmail: activatedUser.email,
       subject: 'User activation',
-      html: '<h1>Please activate your user</h1>'
+      html: activateUserMail(resetLink),
     });
     return activatedUser;
   }

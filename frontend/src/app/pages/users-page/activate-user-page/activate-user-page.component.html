@@ -1,0 +1,49 @@
+<app-landing>
+  <h3>Activate user</h3>
+  <div
+    *ngIf="loading$ | async"
+    class="spinner-border"
+    role="status"
+  >
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <div
+    *ngIf="formError$ | async as error"
+    class="alert alert-danger"
+    role="alert"
+  >
+    {{error}}
+  </div>
+  <div
+    *ngIf="error$ | async as error"
+    class="alert alert-danger"
+    role="alert"
+  >
+    Server error: {{error.message}}
+  </div>
+  <div
+    *ngIf="targetUser$ | async as targetUser"
+  >
+    <div>Activating user</div>
+    <div>id: {{targetUser.id}}</div>
+    <div>Name: {{targetUser.lastName}} {{targetUser.firstName}}</div>
+    <form
+      *ngIf="!targetUser.email"
+      [formGroup]="activateUserForm"
+      (ngSubmit)="activate()"
+    >
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="text" class="form-control" id="email" formControlName="email">
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary w-100"
+        [disabled]="loading$ | async"
+      >
+        Activate
+      </button>
+    </form>
+    <div *ngIf="targetUser.email">User activated</div>
+  </div>
+</app-landing>

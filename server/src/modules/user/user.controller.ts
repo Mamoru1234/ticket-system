@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UserResponse } from '../../dto/user.response';
 import { UserService } from './user.service';
 import { plainToClass } from 'class-transformer';
@@ -43,5 +43,15 @@ export class UserController {
   ): Promise<UserResponse> {
     const activatedUser = await this.userService.activateUser(data);
     return plainToClass(UserResponse, activatedUser, DEFAULT_TRANSFORM_OPTIONS);
+  }
+
+  @Get(':userId')
+  @Role(UserRole.TEACHER)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  async getById(
+    @Param('userId') userId: number,
+  ): Promise<UserResponse> {
+    const user = await this.userService.getById(userId);
+    return plainToClass(UserResponse, user);
   }
 }

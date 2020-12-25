@@ -21,3 +21,8 @@ export interface CreateUserPayload {
   lastName: string;
   role: string;
 }
+
+export interface ActivateUserPayload {
+  id: number;
+  email: string;
+}

@@ -4,7 +4,7 @@ import { LoginBody, LoginResponse } from './dto/login.endpoint';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { delay } from 'rxjs/operators';
-import { CreateUserPayload, UserResponse } from './dto/user.endpoint';
+import { ActivateUserPayload, CreateUserPayload, UserResponse } from './dto/user.endpoint';
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +31,13 @@ export class RestApiService {
 
   createUser(data: CreateUserPayload): Observable<UserResponse> {
     return this.http.post<UserResponse>(`${environment.apiUrl}/users/admin/create`, data);
+  }
+
+  getById(userId: number): Observable<UserResponse> {
+    return this.http.get<UserResponse>(`${environment.apiUrl}/users/${userId}`);
+  }
+
+  activateUser(data: ActivateUserPayload): Observable<UserResponse> {
+    return this.http.put<UserResponse>(`${environment.apiUrl}/users/activate`, data);
   }
 }

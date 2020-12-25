@@ -6,6 +6,12 @@ import { createHmac } from 'crypto';
 import { UserEntity } from '../database/entity/user.entity';
 import { TokenResponse } from './dto/token.response';
 import { JwtService } from '@nestjs/jwt';
+import { stringify } from 'querystring';
+
+export enum TokenType {
+  AUTH = 'AUTH',
+  SET_PASSWORD = 'SET_PASSWORD',
+}
 
 @Injectable()
 export class AuthService {
@@ -29,10 +35,30 @@ export class AuthService {
   }
 
   async createToken(user: UserEntity): Promise<TokenResponse> {
-    const payload = { sub: user.id, username: user.email };
+    const payload = {
+      sub: user.id,
+      username: user.email,
+      tokenType: TokenType.AUTH,
+    };
     const token = await this.jwtService.signAsync(payload);
     return {
       token,
     };
+  }
+
+  async createSetPasswordLink(targetUser: UserEntity): Promise<string> {
+    const setPasswordUrl = this.configService.get('SET_PASSWORD_URL');
+    const payload = {
+      sub: targetUser.id,
+      username: targetUser.email,
+      tokenType: TokenType.SET_PASSWORD,
+    };
+    const setPasswordToken = await this.jwtService.signAsync(payload, {
+      expiresIn: '15d',
+    });
+    const params = stringify({
+      token: setPasswordToken,
+    })
+    return `${setPasswordUrl}?${params}`;
   }
 }

@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { UserDao } from '../../database/dao/user.dao';
 import { Connection } from 'typeorm';
+import { TokenType } from '../auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -19,14 +20,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: any) {
-    const user = this.userDao.findOne(this.connection.manager, {
+  async validate(payload: any) {
+    if (payload.tokenType !== TokenType.AUTH) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.userDao.findOne(this.connection.manager, {
       where: {
         id: payload.sub,
       },
     });
     if (!user) {
       throw new UnauthorizedException();
+    }
+    if (user.email !== payload.username) {
+      throw new UnauthorizedException('Email changed');
     }
     return user;
   }
