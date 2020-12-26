@@ -1,0 +1,14 @@
+version: '3'
+services:
+  server:
+    image: oleksiygontarpersonal/ticket-system:server-0.0.0
+    build: .
+    container_name: server.ticket.system
+    env_file: .env
+    environment:
+      DB_HOST: db.ticket.system
+
+networks:
+  default:
+    external:
+      name: ticket.system
