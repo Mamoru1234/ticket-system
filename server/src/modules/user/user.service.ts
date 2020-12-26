@@ -51,11 +51,7 @@ export class UserService {
       return this.userDao.save(tx, user);
     });
     const resetLink = await this.authService.createSetPasswordLink(activatedUser);
-    await this.mailProvider.sendMail({
-      targetEmail: activatedUser.email,
-      subject: 'User activation',
-      html: activateUserMail(resetLink),
-    });
+    await this.mailProvider.sendMail(activateUserMail(activatedUser, resetLink));
     return activatedUser;
   }
 }

@@ -8,11 +8,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
     DatabaseModule,
     PassportModule,
+    MailModule,
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService): JwtModuleOptions => ({
         secret: configService.get('JWT_SECRET'),

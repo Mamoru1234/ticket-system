@@ -11,3 +11,7 @@ export interface SetPasswordPayload {
   token: string;
   password: string;
 }
+
+export interface ForgotPasswordPayload {
+  email: string;
+}

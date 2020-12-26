@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserDao } from '../database/dao/user.dao';
 import { Connection } from 'typeorm';
@@ -9,6 +9,9 @@ import { JwtService } from '@nestjs/jwt';
 import { stringify } from 'querystring';
 import { SetPasswordPayload } from './dto/set-password.payload';
 import { TokenPayload, TokenType } from './dto/token.payload';
+import { ForgotPasswordPayload } from './dto/forgot-password.payload';
+import { MAIL_PROVIDER_TOKEN, MailProvider } from '../mail/provider/mail-provider.interface';
+import { forgotPasswordMail } from './mail/forgot-password.mail';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +20,7 @@ export class AuthService {
     private readonly userDao: UserDao,
     private readonly connection: Connection,
     private readonly jwtService: JwtService,
+    @Inject(MAIL_PROVIDER_TOKEN) private readonly mailProvider: MailProvider,
   ) {
   }
 
@@ -79,6 +83,20 @@ export class AuthService {
       user.password = this.hashPassword(user.email, data.password);
       await this.userDao.save(txn, user);
     });
+  }
+
+  async forgotPassword(data: ForgotPasswordPayload): Promise<void> {
+    const user = await this.userDao.findOne(this.connection.manager, {
+      where: {
+        email: data.email,
+      },
+    });
+    if (!user) {
+      console.log('No user found for forgot');
+      return;
+    }
+    const resetLink = await this.createSetPasswordLink(user);
+    await this.mailProvider.sendMail(forgotPasswordMail(user, resetLink));
   }
 
   verifyAsync(token: string): Promise<TokenPayload> {

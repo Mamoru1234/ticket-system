@@ -1,8 +1,8 @@
-import { IsDefined, IsString, MinLength } from 'class-validator';
+import { IsDefined, IsJWT, IsString, MinLength } from 'class-validator';
 
 export class SetPasswordPayload {
   @IsDefined()
-  @IsString()
+  @IsJWT()
   token: string;
 
   @IsDefined()

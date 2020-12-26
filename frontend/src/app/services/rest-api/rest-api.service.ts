@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LoginBody, LoginResponse, SetPasswordPayload } from './dto/login.endpoint';
+import { ForgotPasswordPayload, LoginBody, LoginResponse, SetPasswordPayload } from './dto/login.endpoint';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { delay } from 'rxjs/operators';
@@ -43,5 +43,9 @@ export class RestApiService {
 
   activateUser(data: ActivateUserPayload): Observable<UserResponse> {
     return this.http.put<UserResponse>(`${environment.apiUrl}/users/activate`, data);
+  }
+
+  forgotPassword(data: ForgotPasswordPayload): Observable<void> {
+    return this.http.put<void>(`${environment.apiUrl}/auth/forgot-password`, data);
   }
 }

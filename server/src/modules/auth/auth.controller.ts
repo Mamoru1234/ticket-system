@@ -8,6 +8,7 @@ import { plainToClass } from 'class-transformer';
 import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.options';
 import { UserResponse } from '../../dto/user.response';
 import { SetPasswordPayload } from './dto/set-password.payload';
+import { ForgotPasswordPayload } from './dto/forgot-password.payload';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +28,13 @@ export class AuthController {
     @Body() data: SetPasswordPayload,
   ): Promise<void> {
     return this.authService.setPassword(data);
+  }
+
+  @Put('forgot-password')
+  forgotPassword(
+    @Body() data: ForgotPasswordPayload,
+  ): Promise<void> {
+    return this.authService.forgotPassword(data);
   }
 
   @UseGuards(AuthGuard('jwt'))
