@@ -1,0 +1,30 @@
+<app-landing>
+  <h3>Create new group</h3>
+  <div
+    *ngIf="error$ | async as error"
+    class="alert alert-danger"
+    role="alert"
+  >
+    Server error: {{error.message}}
+  </div>
+  <div
+    *ngIf="createdGroup$ | async as createdGroup"
+    class="alert alert-secondary"
+    role="alert"
+  >
+    Group created: {{createdGroup.name}} id: {{createdGroup.id}}
+  </div>
+  <form [formGroup]="createGroupForm" (ngSubmit)="submit()">
+    <div class="mb-3">
+      <label for="name" class="form-label">Group name</label>
+      <input type="text" class="form-control" id="name" formControlName="name">
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary w-100"
+      [disabled]="loading$ | async"
+    >
+      Create group
+    </button>
+  </form>
+</app-landing>

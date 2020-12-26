@@ -7,6 +7,7 @@ import { UserStore } from '../../stores/user.store';
 import { UserResponse, UserRole } from '../../services/rest-api/dto/user.endpoint';
 import { FetchService } from '../../services/fetch.service';
 import { takeUntil } from 'rxjs/operators';
+import { RoleHelper } from '../../helpers/role.helper';
 
 export interface HeaderItem {
   label: string;
@@ -39,14 +40,20 @@ export class AppHeaderComponent implements OnInit {
           this.items$.next([]);
           return;
         }
-        if (user.role === UserRole.ADMIN) {
-          this.items$.next([
-            {
-              label: 'users',
-              url: '/admin/users',
-            },
-          ]);
+        const items: HeaderItem[] = [];
+        if (RoleHelper.hasRole(user.role, UserRole.TEACHER)) {
+          items.push({
+            label: 'Teacher groups',
+            url: '/groups/teacher',
+          });
         }
+        if (RoleHelper.hasRole(user.role, UserRole.ADMIN)) {
+          items.push({
+            label: 'users',
+            url: '/admin/users',
+          });
+        }
+        this.items$.next(items);
       }
     });
   }

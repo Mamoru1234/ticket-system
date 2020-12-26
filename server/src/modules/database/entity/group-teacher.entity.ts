@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { StudentGroupEntity } from './student-group.entity';
 import { UserEntity } from './user.entity';
 
@@ -10,6 +10,9 @@ export class GroupTeacherEntity {
   @ManyToOne(() => StudentGroupEntity, 'teachers')
   @JoinColumn({name: 'groupId'})
   group!: StudentGroupEntity;
+
+  @Column('groupId')
+  groupId!: string;
 
   @ManyToOne(() => UserEntity, 'teacher')
   @JoinColumn()

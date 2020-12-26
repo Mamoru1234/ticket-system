@@ -1,0 +1,26 @@
+<app-landing>
+  <h3>Your groups</h3>
+  <div
+    *ngIf="loading$ | async"
+    class="spinner-border"
+    role="status"
+  >
+    <span class="visually-hidden invisible">Loading...</span>
+  </div>
+  <div class="d-flex justify-content-end py-1">
+    <button
+      class="btn btn-primary"
+      routerLink="/groups/create"
+    >
+      Add group
+    </button>
+  </div>
+  <div *ngIf="groups$ | async as groups" class="row row-cols-4">
+    <div *ngFor="let group of groups" class="col pb-1">
+      <div class="card">
+        <div class="card-body">{{group.name}}</div>
+      </div>
+    </div>
+    <div *ngIf="groups.length === 0">No groups</div>
+  </div>
+</app-landing>

@@ -15,6 +15,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/admin/admin.module').then((m) => m.AdminModule),
       },
       {
+        path: 'groups',
+        loadChildren: () => import('./pages/groups-page/groups-page.module').then(m => m.GroupsPageModule),
+      },
+      {
         path: 'users',
         loadChildren: () => import('./pages/users-page/users-page.module').then((m) => m.UsersPageModule),
       },

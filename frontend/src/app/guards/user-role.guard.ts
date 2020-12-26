@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { UserStore } from '../stores/user.store';
 import { UserRole } from '../services/rest-api/dto/user.endpoint';
+import { RoleHelper } from '../helpers/role.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -23,19 +24,6 @@ export class UserRoleGuard implements CanActivate {
       console.error('No user in store');
       return false;
     }
-    return this.mapRolePriority(user.role) >= this.mapRolePriority(requiredRole);
-  }
-
-  mapRolePriority(role: UserRole): number {
-    if (role === UserRole.STUDENT) {
-      return 0;
-    }
-    if (role === UserRole.TEACHER) {
-      return 1;
-    }
-    if (role === UserRole.ADMIN) {
-      return 2;
-    }
-    throw new Error('Unknown role');
+    return RoleHelper.hasRole(user.role, requiredRole);
   }
 }

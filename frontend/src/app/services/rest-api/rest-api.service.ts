@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { delay } from 'rxjs/operators';
 import { ActivateUserPayload, CreateUserPayload, UserResponse } from './dto/user.endpoint';
+import { CreateGroupPayload, GroupResponse } from './dto/group.endpoint';
 
 @Injectable({
   providedIn: 'root',
@@ -47,5 +48,13 @@ export class RestApiService {
 
   forgotPassword(data: ForgotPasswordPayload): Observable<void> {
     return this.http.put<void>(`${environment.apiUrl}/auth/forgot-password`, data);
+  }
+
+  getTeacherGroups(): Observable<GroupResponse[]> {
+    return this.http.get<GroupResponse[]>(`${environment.apiUrl}/student-group/teacher`);
+  }
+
+  createGroup(data: CreateGroupPayload): Observable<GroupResponse> {
+    return this.http.post<GroupResponse>(`${environment.apiUrl}/student-group/create`, data);
   }
 }

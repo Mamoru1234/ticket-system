@@ -1,5 +1,5 @@
 <div class="d-flex justify-items-between py-1">
-  <div *ngIf="items$ | async as items" class="flex-grow-1">
+  <div *ngIf="items$ | async as items" class="flex-grow-1 d-flex">
     <div
       *ngFor="let item of items"
       [routerLink]="item.url"

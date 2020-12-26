@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { GroupMemberEntity } from './group-member.entity';
 import { UserRole } from '../../../constants/user-role.enum';
+import { GroupTeacherEntity } from './group-teacher.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -29,8 +30,8 @@ export class UserEntity {
   })
   participate!: Promise<GroupMemberEntity[]>;
 
-  @OneToMany(() => GroupMemberEntity, 'student', {
+  @OneToMany(() => GroupTeacherEntity, 'teacher', {
     lazy: true,
   })
-  teacher!: GroupMemberEntity[];
+  teacher!: Promise<GroupTeacherEntity[]>;
 }

@@ -16,6 +16,9 @@ export class FetchWrapper {
   isInStatus(status: FetchStatus): Observable<boolean> {
     return this.fetchStatus$.pipe(map(currentStatus => currentStatus === status));
   }
+  isInStatuses(...statuses: FetchStatus[]): Observable<boolean> {
+    return this.fetchStatus$.pipe(map(currentStatus => statuses.includes(currentStatus)));
+  }
   fetch<T>(call: Observable<T>): Observable<T> {
     this.fetchStatus$.next(FetchStatus.IN_PROGRESS);
     this.error$.next(null);
