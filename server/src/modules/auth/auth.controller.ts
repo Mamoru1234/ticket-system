@@ -9,7 +9,7 @@ import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.optio
 import { UserResponse } from '../../dto/user.response';
 import { SetPasswordPayload } from './dto/set-password.payload';
 
-@Controller('/api/v1/auth')
+@Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

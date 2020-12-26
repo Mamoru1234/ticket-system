@@ -10,7 +10,7 @@ import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.optio
 import { CreateUserPayload } from './dto/create-user.payload';
 import { ActivateUserPayload } from './dto/activate-user.payload';
 
-@Controller('/api/v1/users')
+@Controller('users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
