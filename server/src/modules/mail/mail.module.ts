@@ -19,7 +19,7 @@ export enum MailProviderType {
           return new ConsoleMailProviderService();
         }
         if (mailProviderType === MailProviderType.MAIL_JET) {
-          return new MailJetMailProviderService();
+          return new MailJetMailProviderService(configService);
         }
         throw new Error(`Unknown Mail provider: ${mailProviderType}`);
       },
