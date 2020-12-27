@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { FetchService, FetchStatus } from '../../../services/fetch.service';
 import { RestApiService } from '../../../services/rest-api/rest-api.service';
 import { finalize, map } from 'rxjs/operators';
-import { UserResponse } from '../../../services/rest-api/dto/user.endpoint';
+import { UserResponse, UserRole } from '../../../services/rest-api/dto/user.endpoint';
 
 @Component({
   selector: 'app-create-user-page',
@@ -24,12 +24,26 @@ export class CreateUserPageComponent implements OnInit {
   loading$ = this.createUserWrapper.isInStatus(FetchStatus.IN_PROGRESS);
   formError$ = new BehaviorSubject<string | null>(null);
   createdUser$ = new BehaviorSubject<UserResponse | null>(null);
+  roleItems = [
+    {
+      label: 'Student',
+      value: UserRole.STUDENT,
+    },
+    {
+      label: 'Teacher',
+      value: UserRole.TEACHER,
+    },
+    {
+      label: 'Admin',
+      value: UserRole.ADMIN,
+    },
+  ];
 
   ngOnInit(): void {
     this.createUserForm = this.formBuilder.group({
       firstName: [null, Validators.required],
       lastName: [null, Validators.required],
-      role: [null, Validators.required],
+      role: [UserRole.STUDENT, Validators.required],
     });
   }
 
@@ -46,6 +60,7 @@ export class CreateUserPageComponent implements OnInit {
       .subscribe({
         next: (user) => {
           this.createUserForm.reset();
+          this.createUserForm.get('role')?.setValue(UserRole.STUDENT);
           this.createdUser$.next(user);
         },
       });

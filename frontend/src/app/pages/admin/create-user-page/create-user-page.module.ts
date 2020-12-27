@@ -4,6 +4,8 @@ import { CreateUserPageComponent } from './create-user-page.component';
 import { CreateUserPageRouting } from './create-user-page.routing';
 import { LandingModule } from '../../../components/landing/landing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [CreateUserPageComponent],
@@ -12,6 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CreateUserPageRouting,
     LandingModule,
     ReactiveFormsModule,
-  ]
+    MatFormFieldModule,
+    MatSelectModule,
+  ],
 })
 export class CreateUserPageModule { }

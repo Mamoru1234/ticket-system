@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { ForgotPasswordPayload, LoginBody, LoginResponse, SetPasswordPayload } from './dto/login.endpoint';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { delay } from 'rxjs/operators';
 import { ActivateUserPayload, CreateUserPayload, UserResponse } from './dto/user.endpoint';
 import { CreateGroupPayload, GroupResponse } from './dto/group.endpoint';
 
@@ -16,10 +15,7 @@ export class RestApiService {
   ) {
   }
   login(body: LoginBody): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, body)
-      .pipe(
-        delay(1000),
-      );
+    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, body);
   }
 
   setPassword(data: SetPasswordPayload): Observable<void> {

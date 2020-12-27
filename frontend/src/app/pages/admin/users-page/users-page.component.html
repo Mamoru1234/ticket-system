@@ -10,21 +10,24 @@
       </button>
     </div>
     <div
-      class="row"
+      class="row gy-2 row-cols-1 row-cols-md-4"
       *ngIf="users$ | async as users"
     >
       <div
-        class="col-3"
+        class="col pb-1"
         *ngFor="let user of users"
       >
         <div class="card">
-          <div class="card-body d-flex">
-            <div>{{user.lastName}} {{user.firstName}}</div>
-            <div
-              *ngIf="!user.email"
-              class="user-select-none px-2"
-              [routerLink]="'/users/activate/' + user.id"
-            >Activate</div>
+          <div class="card-body">
+            <div class="d-flex justify-content-center">
+              <div>{{user.lastName}} {{user.firstName}}</div>
+              <div
+                *ngIf="!user.email"
+                class="user-select-none pl-1 text-primary"
+                [routerLink]="'/users/activate/' + user.id"
+              >Activate</div>
+            </div>
+            <div class="text-center">Role: {{user.role}}</div>
           </div>
         </div>
       </div>

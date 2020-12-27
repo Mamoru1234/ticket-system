@@ -9,6 +9,7 @@ import { LandingModule } from './components/landing/landing.module';
 import { environment } from '../environments/environment';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { UserStore } from './stores/user.store';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { UserStore } from './stores/user.store';
     NgxsModule.forRoot([UserStore], {
       developmentMode: !environment.production,
     }),
+    BrowserAnimationsModule,
   ],
   providers: [
     {
