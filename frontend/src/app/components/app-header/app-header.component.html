@@ -1,11 +1,12 @@
 <div class="d-flex justify-items-between py-1">
-  <div *ngIf="items$ | async as items" class="flex-grow-1 d-flex">
-    <div
+  <nav *ngIf="items$ | async as items" class="flex-grow-1 d-flex flex-wrap">
+    <button
       *ngFor="let item of items"
       [routerLink]="item.url"
-      class="p-1 user-select-none"
-    >{{item.label}}</div>
-  </div>
+      class="btn btn-outline-primary m-1"
+      [class.active]="isActive(item.url)"
+    >{{item.label}}</button>
+  </nav>
   <div>
     <button
       class="btn btn-outline-secondary"

@@ -6,6 +6,7 @@ CREATE TABLE users(
   "lastName" TEXT NOT NULL,
   "role" TEXT NOT NULL,
   "email" TEXT UNIQUE,
+  "lastForgotPassRequest" BIGINT NOT NULL DEFAULT 0,
   "password" TEXT
 );
 

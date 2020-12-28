@@ -24,6 +24,8 @@ export class AuthService {
   ) {
   }
 
+  private readonly PASSWORD_RESET_PERIOD = (+this.configService.get('AUTH_PASS_RESET_PERIOD_SEC', '1800')) * 1000;
+
   async getAll(): Promise<void> {
     console.log(await this.userDao.find(this.connection.manager));
   }
@@ -95,8 +97,13 @@ export class AuthService {
       console.log('No user found for forgot');
       return;
     }
+    if ((Date.now() - user.lastForgotPassRequest) < this.PASSWORD_RESET_PERIOD) {
+      throw new BadRequestException('Too many forgot password requests');
+    }
     const resetLink = await this.createSetPasswordLink(user);
     await this.mailProvider.sendMail(forgotPasswordMail(user, resetLink));
+    user.lastForgotPassRequest = Date.now();
+    await this.userDao.save(this.connection.manager, user);
   }
 
   verifyAsync(token: string): Promise<TokenPayload> {

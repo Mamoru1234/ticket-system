@@ -63,4 +63,8 @@ export class AppHeaderComponent implements OnInit {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/login']);
   }
+
+  isActive(url: string): boolean {
+    return this.router.isActive(url, true);
+  }
 }

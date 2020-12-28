@@ -8,10 +8,6 @@
       <!--suppress HtmlFormInputWithoutLabel -->
       <input type="password" class="form-control" placeholder="Password"  formControlName="password">
     </div>
-    <div
-      class="text-secondary user-select-none"
-      routerLink="/forgot-password"
-    >Forgot password</div>
     <div *ngIf="isLoading$ | async">Please login handling</div>
     <div class="pt-2">
       <button
@@ -20,5 +16,9 @@
         [disabled]="isLoading$ | async"
       >Login</button>
     </div>
+    <div
+      class="text-secondary user-select-none text-right pt-2"
+      routerLink="/forgot-password"
+    >Forgot password</div>
   </form>
 </div>
