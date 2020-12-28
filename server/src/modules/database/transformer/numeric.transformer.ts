@@ -3,14 +3,14 @@ import { ValueTransformer } from 'typeorm';
 export class NumericTransformer implements ValueTransformer {
   from(value?: string): number {
     if (value == null) {
-      return null;
+      return value as any;
     }
     return +value;
   }
 
   to(value?: number): string {
     if (value == null) {
-      return null;
+      return value as any;
     }
     return value + '';
   }
