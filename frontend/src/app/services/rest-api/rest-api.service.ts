@@ -53,4 +53,8 @@ export class RestApiService {
   createGroup(data: CreateGroupPayload): Observable<GroupResponse> {
     return this.http.post<GroupResponse>(`${environment.apiUrl}/student-group/create`, data);
   }
+
+  getGroupById(groupId: string): Observable<GroupResponse> {
+    return this.http.get<GroupResponse>(`${environment.apiUrl}/student-group/${groupId}`);
+  }
 }

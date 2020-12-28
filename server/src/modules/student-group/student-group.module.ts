@@ -8,6 +8,7 @@ import { StudentGroupService } from './student-group.service';
   imports: [DatabaseModule, AuthModule],
   controllers: [StudentGroupController],
   providers: [StudentGroupService],
+  exports: [StudentGroupService],
 })
 export class StudentGroupModule {
 

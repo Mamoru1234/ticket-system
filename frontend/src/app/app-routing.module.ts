@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { LessonsPageModule } from './pages/lessons-page/lessons-page.module';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
       {
         path: 'groups',
         loadChildren: () => import('./pages/groups-page/groups-page.module').then(m => m.GroupsPageModule),
+      },
+      {
+        path: 'lessons',
+        loadChildren: () => LessonsPageModule,
       },
       {
         path: 'users',

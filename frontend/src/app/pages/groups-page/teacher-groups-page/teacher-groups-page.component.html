@@ -17,7 +17,7 @@
   </div>
   <div *ngIf="groups$ | async as groups" class="row row-cols-1 row-cols-md-4">
     <div *ngFor="let group of groups" class="col pb-1">
-      <div class="card">
+      <div class="card" [routerLink]="'/groups/' + group.id">
         <div class="card-body">{{group.name}}</div>
       </div>
     </div>

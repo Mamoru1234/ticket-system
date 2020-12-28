@@ -1,11 +1,17 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { NUMERIC_TRANSFORMER_INSTANCE } from '../transformer/numeric.transformer';
 import { StudentGroupEntity } from './student-group.entity';
-import { UserEntity } from './user.entity';
 
-@Entity('studentGroupTeachers')
-export class GroupTeacherEntity {
+@Entity('lesson')
+export class LessonEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+
+  @Column('bigint', {
+    transformer: NUMERIC_TRANSFORMER_INSTANCE,
+    default: 0,
+  })
+  timestamp: number;
 
   @ManyToOne(() => StudentGroupEntity, 'teachers')
   @JoinColumn({name: 'groupId'})
@@ -13,11 +19,4 @@ export class GroupTeacherEntity {
 
   @Column('groupId')
   groupId!: string;
-
-  @ManyToOne(() => UserEntity, 'teacher')
-  @JoinColumn({name: 'teacherId'})
-  teacher!: UserEntity;
-
-  @Column('teacherId')
-  teacherId: number;
 }

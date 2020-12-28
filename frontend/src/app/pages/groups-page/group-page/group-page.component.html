@@ -1,0 +1,31 @@
+<app-landing>
+  <div
+    *ngIf="loading$ | async"
+    class="spinner-border"
+    role="status"
+  >
+    <span class="visually-hidden invisible">Loading...</span>
+  </div>
+  <div *ngIf="pageData$ | async as pageData">
+    <h3>Group: {{pageData.group.name}}</h3>
+    <div class="d-flex justify-content-end py-1">
+      <button
+        class="btn btn-primary"
+        routerLink="/groups/create"
+      >
+        Add lesson
+      </button>
+    </div>
+    <div>
+      <h4>Lessons</h4>
+      <div
+        *ngFor="let lesson of pageData.lessons"
+      >
+        {{lesson.timestamp}}
+      </div>
+      <div *ngIf="pageData.lessons.length === 0">
+        No lessons for group
+      </div>
+    </div>
+  </div>
+</app-landing>

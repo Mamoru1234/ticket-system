@@ -23,7 +23,11 @@ const routes: Routes = [
         data: {
           requiredRole: UserRole.TEACHER,
         },
-      }
+      },
+      {
+        path: ':groupId',
+        loadChildren: () => import('./group-page/group-page.module').then((m) => m.GroupPageModule),
+      },
     ],
   },
 ];

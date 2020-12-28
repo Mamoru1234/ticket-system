@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { GroupMemberEntity } from './group-member.entity';
 import { GroupTeacherEntity } from './group-teacher.entity';
+import { LessonEntity } from './lesson.entity';
 
 @Entity('studentGroup')
 export class StudentGroupEntity {
@@ -10,10 +10,10 @@ export class StudentGroupEntity {
   @Column()
   name!: string;
 
-  @OneToMany(() => GroupMemberEntity, 'group', {
+  @OneToMany(() => LessonEntity, 'group', {
     lazy: true
   })
-  members!: Promise<GroupMemberEntity[]>;
+  lessons!: Promise<LessonEntity[]>;
 
   @OneToMany(() => GroupTeacherEntity, 'group', {
     lazy: true,

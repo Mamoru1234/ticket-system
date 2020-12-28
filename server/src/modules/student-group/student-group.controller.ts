@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { StudentGroupResponse } from '../../dto/student-group.response';
 import { Role } from '../../decorators/role.decorator';
 import { UserRole } from '../../constants/user-role.enum';
@@ -34,6 +34,16 @@ export class StudentGroupController {
     @Body() data: CreateGroupPayload,
   ): Promise<StudentGroupResponse> {
     const group = await this.studentGroupService.createGroup(data, user);
+    return plainToClass(StudentGroupResponse, group);
+  }
+
+  @Get(':groupId')
+  @UseGuards(AuthGuard('jwt'))
+  async getById(
+    @Param('groupId') groupId: string,
+    @User() user: UserEntity,
+  ): Promise<StudentGroupResponse> {
+    const group = await this.studentGroupService.getById(groupId, user);
     return plainToClass(StudentGroupResponse, group);
   }
 }
