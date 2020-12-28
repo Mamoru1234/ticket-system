@@ -1,0 +1,28 @@
+<app-landing>
+  <h3>Create new lesson</h3>
+  <div
+    *ngIf="error$ | async as error"
+    class="alert alert-danger"
+    role="alert"
+  >
+    Server error: {{error.message}}
+  </div>
+  <form [formGroup]="createLessonForm" (ngSubmit)="submit()">
+    <div class="mb-3">
+      <label for="group" class="form-label">Group</label>
+      <input type="text" class="form-control" id="group" formControlName="groupId">
+    </div>
+    <div class="mb-3">
+      <label for="time" class="form-label">Time</label>
+      <input type="text" class="form-control" id="time" formControlName="timestamp">
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-primary w-100"
+      [disabled]="loading$ | async"
+    >
+      Create lesson
+    </button>
+  </form>
+</app-landing>

@@ -52,6 +52,6 @@ export class UserController {
     @Param('userId') userId: number,
   ): Promise<UserResponse> {
     const user = await this.userService.getById(userId);
-    return plainToClass(UserResponse, user);
+    return plainToClass(UserResponse, user, DEFAULT_TRANSFORM_OPTIONS);
   }
 }

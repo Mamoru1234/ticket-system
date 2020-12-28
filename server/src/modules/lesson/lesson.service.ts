@@ -30,6 +30,9 @@ export class LessonService {
       where: {
         group,
       },
+      order: {
+        timestamp: 'DESC',
+      },
     });
   }
 }

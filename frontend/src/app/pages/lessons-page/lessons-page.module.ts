@@ -9,6 +9,14 @@ const routes: Routes = [
     path: '',
     children: [
       {
+        path: 'create',
+        loadChildren: () => import('./lesson-create-page/lesson-create-page.module').then(m => m.LessonCreatePageModule),
+        canActivate: [UserRoleGuard],
+        data: {
+          requiredRole: UserRole.TEACHER,
+        },
+      },
+      {
         path: 'group/:groupId',
         loadChildren: () => import('./group-lessons-page/group-lessons-page.module').then((m) => m.GroupLessonsPageModule),
         canActivate: [UserRoleGuard],

@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ActivateUserPayload, CreateUserPayload, UserResponse } from './dto/user.endpoint';
 import { CreateGroupPayload, GroupResponse } from './dto/group.endpoint';
+import { CreateLessonPayload, LessonResponse } from './dto/lesson.endpoint';
 
 @Injectable({
   providedIn: 'root',
@@ -56,5 +57,13 @@ export class RestApiService {
 
   getGroupById(groupId: string): Observable<GroupResponse> {
     return this.http.get<GroupResponse>(`${environment.apiUrl}/student-group/${groupId}`);
+  }
+
+  getLessonsByGroupId(groupId: string): Observable<LessonResponse[]> {
+    return this.http.get<LessonResponse[]>(`${environment.apiUrl}/lessons/by-group/${groupId}`);
+  }
+
+  createLesson(data: CreateLessonPayload): Observable<LessonResponse> {
+    return this.http.post<LessonResponse>(`${environment.apiUrl}/lessons/create`, data);
   }
 }

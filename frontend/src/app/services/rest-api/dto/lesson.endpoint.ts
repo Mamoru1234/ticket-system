@@ -3,3 +3,8 @@ export interface LessonResponse {
   timestamp: number;
   groupId: string;
 }
+
+export interface CreateLessonPayload {
+  groupId: string;
+  timestamp: number;
+}

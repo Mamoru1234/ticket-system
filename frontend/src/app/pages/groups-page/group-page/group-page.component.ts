@@ -4,7 +4,8 @@ import { FetchService, FetchStatus } from '../../../services/fetch.service';
 import { RestApiService } from '../../../services/rest-api/rest-api.service';
 import { GroupResponse } from '../../../services/rest-api/dto/group.endpoint';
 import { LessonResponse } from 'src/app/services/rest-api/dto/lesson.endpoint';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface GroupPageData {
   group: GroupResponse;
@@ -28,15 +29,17 @@ export class GroupPageComponent implements OnInit {
   pageData$ = new BehaviorSubject<GroupPageData | null>(null);
   private readonly fetchDataWrapper = this.fetchService.createWrapper();
   loading$ = this.fetchDataWrapper.isInStatuses(FetchStatus.IN_PROGRESS, FetchStatus.INIT);
+  error$ = this.fetchDataWrapper.error$.pipe(map(FetchService.httpErrorMapper));
 
   ngOnInit(): void {
-    this.fetchDataWrapper.fetch(this.restApiService.getGroupById(this.getGroupId()))
+    this.fetchDataWrapper.fetch(combineLatest([
+      this.restApiService.getGroupById(this.getGroupId()),
+      this.restApiService.getLessonsByGroupId(this.getGroupId())]))
       .subscribe({
-        next: (group) => {
-          console.log(group);
+        next: ([group, lessons]) => {
           this.pageData$.next({
             group,
-            lessons: [],
+            lessons,
           });
         },
       });

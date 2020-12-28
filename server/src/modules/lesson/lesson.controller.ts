@@ -9,6 +9,7 @@ import { LessonResponse } from '../../dto/lesson.response';
 import { LessonService } from './lesson.service';
 import { CreateLessonPayload } from './dto/create-lesson.payload';
 import { plainToClass } from 'class-transformer';
+import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.options';
 
 @Controller('lessons')
 export class LessonController {
@@ -24,7 +25,7 @@ export class LessonController {
     @Body() data: CreateLessonPayload,
   ): Promise<LessonResponse> {
     const lesson = await this.lessonService.createLesson(data, user);
-    return plainToClass(LessonResponse, lesson);
+    return plainToClass(LessonResponse, lesson, DEFAULT_TRANSFORM_OPTIONS);
   }
 
   @Get('/by-group/:groupId')
@@ -35,6 +36,6 @@ export class LessonController {
     @User() user: UserEntity,
   ): Promise<LessonResponse[]> {
     const lessons = await this.lessonService.getLessonsByGroup(groupId, user);
-    return plainToClass(LessonResponse, lessons);
+    return plainToClass(LessonResponse, lessons, DEFAULT_TRANSFORM_OPTIONS);
   }
 }

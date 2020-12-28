@@ -9,6 +9,7 @@ import { UserEntity } from '../database/entity/user.entity';
 import { StudentGroupService } from './student-group.service';
 import { plainToClass } from 'class-transformer';
 import { CreateGroupPayload } from './dto/create-group.payload';
+import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.options';
 
 @Controller('student-group')
 export class StudentGroupController {
@@ -23,7 +24,7 @@ export class StudentGroupController {
     @User() user: UserEntity,
   ): Promise<StudentGroupResponse[]> {
     const groups = await this.studentGroupService.getAllTeacherGroups(user);
-    return plainToClass(StudentGroupResponse, groups);
+    return plainToClass(StudentGroupResponse, groups, DEFAULT_TRANSFORM_OPTIONS);
   }
 
   @Post('create')
@@ -34,7 +35,7 @@ export class StudentGroupController {
     @Body() data: CreateGroupPayload,
   ): Promise<StudentGroupResponse> {
     const group = await this.studentGroupService.createGroup(data, user);
-    return plainToClass(StudentGroupResponse, group);
+    return plainToClass(StudentGroupResponse, group, DEFAULT_TRANSFORM_OPTIONS);
   }
 
   @Get(':groupId')
@@ -44,6 +45,6 @@ export class StudentGroupController {
     @User() user: UserEntity,
   ): Promise<StudentGroupResponse> {
     const group = await this.studentGroupService.getById(groupId, user);
-    return plainToClass(StudentGroupResponse, group);
+    return plainToClass(StudentGroupResponse, group, DEFAULT_TRANSFORM_OPTIONS);
   }
 }

@@ -6,12 +6,20 @@
   >
     <span class="visually-hidden invisible">Loading...</span>
   </div>
+  <div
+    *ngIf="error$ | async as error"
+    class="alert alert-danger"
+    role="alert"
+  >
+    Server error: {{error.message}}
+  </div>
   <div *ngIf="pageData$ | async as pageData">
     <h3>Group: {{pageData.group.name}}</h3>
     <div class="d-flex justify-content-end py-1">
       <button
         class="btn btn-primary"
-        routerLink="/groups/create"
+        routerLink="/lessons/create"
+        [queryParams]="{groupId: pageData.group.id}"
       >
         Add lesson
       </button>
