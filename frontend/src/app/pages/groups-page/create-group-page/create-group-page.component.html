@@ -1,12 +1,8 @@
 <app-landing>
   <h3>Create new group</h3>
-  <div
-    *ngIf="error$ | async as error"
-    class="alert alert-danger"
-    role="alert"
-  >
-    Server error: {{error.message}}
-  </div>
+  <app-server-error-container
+    [error]="error$ | async"
+  ></app-server-error-container>
   <div
     *ngIf="createdGroup$ | async as createdGroup"
     class="alert alert-secondary"

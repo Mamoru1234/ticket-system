@@ -26,7 +26,7 @@ export class CreateGroupPageComponent implements OnInit {
   createdGroup$ = new BehaviorSubject<GroupResponse | null>(null);
   createGroupWrapper = this.fetchService.createWrapper();
   loading$ = this.createGroupWrapper.isInStatuses(FetchStatus.IN_PROGRESS);
-  error$ = this.createGroupWrapper.error$.pipe(map(FetchService.httpErrorMapper));
+  error$ = this.createGroupWrapper.error$;
 
   ngOnInit(): void {
   }
