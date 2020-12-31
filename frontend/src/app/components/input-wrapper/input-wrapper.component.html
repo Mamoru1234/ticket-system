@@ -1,0 +1,17 @@
+<ng-container>
+  <ng-content></ng-content>
+<!--  <div>errors: {{control.errors | json}}</div>-->
+  <div *ngIf="control.invalid && control.touched"
+       class="alert alert-danger mt-1">
+
+    <div *ngIf="control.errors.required">
+      Це поле обов'язкове
+    </div>
+    <div *ngIf="control.errors.email">
+      Це поле має бути електоронною адресою
+    </div>
+    <div *ngIf="control.errors.minlength">
+      Це поле має бути {{control.errors.minlength.requiredLength}} символів
+    </div>
+  </div>
+</ng-container>

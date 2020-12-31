@@ -2,13 +2,6 @@
   <div>
     <h3>Create new user</h3>
     <div
-      *ngIf="formError$ | async as error"
-      class="alert alert-danger"
-      role="alert"
-    >
-      {{error}}
-    </div>
-    <div
       *ngIf="error$ | async as error"
       class="alert alert-danger"
       role="alert"
@@ -23,14 +16,18 @@
       User created: {{createdUser.lastName}} {{createdUser.firstName}} {{createdUser.id}}
     </div>
     <form [formGroup]="createUserForm" (ngSubmit)="submit()">
-      <div class="mb-3">
-        <label for="newUserFirstName" class="form-label">Firstname</label>
-        <input type="text" class="form-control" id="newUserFirstName" formControlName="firstName">
-      </div>
-      <div class="mb-3">
-        <label for="newUserLastName" class="form-label">Lastname</label>
-        <input type="text" class="form-control" id="newUserLastName" formControlName="lastName">
-      </div>
+      <app-input-wrapper [control]="createUserForm.get('firstName')">
+        <div class="mb-3">
+          <label for="newUserFirstName" class="form-label">Firstname</label>
+          <input type="text" class="form-control" id="newUserFirstName" formControlName="firstName">
+        </div>
+      </app-input-wrapper>
+      <app-input-wrapper [control]="createUserForm.get('lastName')">
+        <div class="mb-3">
+          <label for="newUserLastName" class="form-label">Lastname</label>
+          <input type="text" class="form-control" id="newUserLastName" formControlName="lastName">
+        </div>
+      </app-input-wrapper>
       <mat-form-field
         appearance="outline"
         class="w-100"

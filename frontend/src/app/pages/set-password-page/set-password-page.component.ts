@@ -37,8 +37,8 @@ export class SetPasswordPageComponent implements OnInit {
   loading$ = this.setPasswordWrapper.isInStatus(FetchStatus.IN_PROGRESS);
   error$ = this.setPasswordWrapper.error$.pipe(map(FetchService.httpErrorMapper));
   setPasswordForm = this.formBuilder.group({
-    password: [null, Validators.required],
-    confirmPassword: [null, Validators.required],
+    password: [null, [Validators.required, Validators.minLength(5)]],
+    confirmPassword: [null, [Validators.required, Validators.minLength(5)]],
   }, {
     validators: passwordMatch,
   });

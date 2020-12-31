@@ -8,13 +8,6 @@
     <span class="visually-hidden">Loading...</span>
   </div>
   <div
-    *ngIf="formError$ | async as error"
-    class="alert alert-danger"
-    role="alert"
-  >
-    {{error}}
-  </div>
-  <div
     *ngIf="error$ | async as error"
     class="alert alert-danger"
     role="alert"
@@ -32,10 +25,12 @@
       [formGroup]="activateUserForm"
       (ngSubmit)="activate()"
     >
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="text" class="form-control" id="email" formControlName="email">
-      </div>
+      <app-input-wrapper [control]="activateUserForm.get('email')">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="text" class="form-control" id="email" formControlName="email">
+        </div>
+      </app-input-wrapper>
       <button
         type="submit"
         class="btn btn-primary w-100"

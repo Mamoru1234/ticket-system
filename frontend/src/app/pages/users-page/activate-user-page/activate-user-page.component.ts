@@ -35,7 +35,6 @@ export class ActivateUserPageComponent implements OnInit {
     this.getUserWrapper.isInStatus(FetchStatus.IN_PROGRESS),
     this.activateUserWrapper.isInStatus(FetchStatus.IN_PROGRESS));
   targetUser$ = new BehaviorSubject<UserResponse | null>(null);
-  formError$ = new BehaviorSubject<string>('');
 
   ngOnInit(): void {
     this.getUserWrapper.fetch(this.restApiService.getById(this.getUserId()))

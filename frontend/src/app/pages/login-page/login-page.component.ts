@@ -18,6 +18,7 @@ export class LoginPageComponent implements OnInit {
   showComponent$ = new BehaviorSubject(true);
   loginFetchWrapper = this.fetchService.createWrapper();
   isLoading$ = this.loginFetchWrapper.isInStatus(FetchStatus.IN_PROGRESS);
+  error$ = this.loginFetchWrapper.error$;
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly restApiService: RestApiService,

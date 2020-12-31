@@ -6,6 +6,7 @@ import { LandingModule } from '../../../components/landing/landing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { InputWrapperModule } from '../../../components/input-wrapper/input-wrapper.module';
 
 @NgModule({
   declarations: [CreateUserPageComponent],
@@ -16,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,
+    InputWrapperModule,
   ],
 })
 export class CreateUserPageModule { }

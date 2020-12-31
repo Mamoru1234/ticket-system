@@ -22,7 +22,6 @@ export class CreateUserPageComponent implements OnInit {
   createUserForm!: FormGroup;
   error$ = this.createUserWrapper.error$.pipe(map(FetchService.httpErrorMapper));
   loading$ = this.createUserWrapper.isInStatus(FetchStatus.IN_PROGRESS);
-  formError$ = new BehaviorSubject<string | null>(null);
   createdUser$ = new BehaviorSubject<UserResponse | null>(null);
   roleItems = [
     {
@@ -49,11 +48,9 @@ export class CreateUserPageComponent implements OnInit {
 
   submit(): void {
     if (!this.createUserForm.valid) {
-      this.formError$.next('Some form values invalid');
       return;
     }
     this.createUserForm.disable();
-    this.formError$.next(null);
     this.createdUser$.next(null);
     this.createUserWrapper.fetch(this.restApiService.createUser(this.createUserForm.value))
       .pipe(finalize(() => this.createUserForm.enable()))

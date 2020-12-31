@@ -1,13 +1,18 @@
 <div class="container pt-5">
+  <app-server-error-container [error]="error$ | async"></app-server-error-container>
   <form [formGroup]="form" (ngSubmit)="login()">
-    <div class="input-group pt-2">
-      <!--suppress HtmlFormInputWithoutLabel -->
-      <input type="text" class="form-control" placeholder="Login" formControlName="email">
-    </div>
-    <div class="input-group pt-2">
-      <!--suppress HtmlFormInputWithoutLabel -->
-      <input type="password" class="form-control" placeholder="Password"  formControlName="password">
-    </div>
+    <app-input-wrapper [control]="form.get('email')">
+      <div class="input-group pt-2">
+        <!--suppress HtmlFormInputWithoutLabel -->
+        <input type="text" class="form-control" placeholder="Login" formControlName="email">
+      </div>
+    </app-input-wrapper>
+    <app-input-wrapper [control]="form.get('password')">
+      <div class="input-group pt-2">
+        <!--suppress HtmlFormInputWithoutLabel -->
+        <input type="password" class="form-control" placeholder="Password"  formControlName="password">
+      </div>
+    </app-input-wrapper>
     <div *ngIf="isLoading$ | async">Please login handling</div>
     <div class="pt-2">
       <button

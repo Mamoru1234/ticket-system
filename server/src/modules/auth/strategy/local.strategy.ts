@@ -23,11 +23,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       },
     });
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Email or password invalid');
     }
     const hash = this.authService.hashPassword(user.email, password);
     if (hash !== user.password) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Email or password invalid');
     }
     return user;
   }

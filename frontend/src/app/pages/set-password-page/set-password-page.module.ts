@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SetPasswordPageComponent } from './set-password-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { InputWrapperModule } from '../../components/input-wrapper/input-wrapper.module';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
+    InputWrapperModule,
   ],
 })
 export class SetPasswordPageModule { }
