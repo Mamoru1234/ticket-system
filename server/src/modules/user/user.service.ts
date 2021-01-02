@@ -1,7 +1,7 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { UserEntity } from '../database/entity/user.entity';
 import { UserDao } from '../database/dao/user.dao';
-import { Connection } from 'typeorm';
+import { Connection, In } from 'typeorm';
 import { CreateUserPayload } from './dto/create-user.payload';
 import { ActivateUserPayload } from './dto/activate-user.payload';
 import { MAIL_PROVIDER_TOKEN, MailProvider } from '../mail/provider/mail-provider.interface';
@@ -32,6 +32,17 @@ export class UserService {
       throw new BadRequestException('User not found');
     }
     return user;
+  }
+
+  async getByIds(userIds: number[]): Promise<UserEntity[]> {
+    if (userIds.length === 0) {
+      throw new BadRequestException('Empty array');
+    }
+    return this.userDao.find(this.connection.manager, {
+      where: {
+        id: In(userIds),
+      },
+    });
   }
 
   createUser(payload: CreateUserPayload): Promise<UserEntity> {

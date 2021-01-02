@@ -27,9 +27,4 @@ import { Connection } from 'typeorm';
   exports: DAO_LIST,
 })
 export class DatabaseModule {
-  constructor(
-    private readonly userDao: UserDao,
-    private readonly connection: Connection,
-  ) {
-  }
 }

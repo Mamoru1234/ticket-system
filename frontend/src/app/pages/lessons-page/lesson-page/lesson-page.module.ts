@@ -7,6 +7,7 @@ import { LoaderModule } from '../../../components/loader/loader.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputWrapperModule } from '../../../components/input-wrapper/input-wrapper.module';
 import { ServerErrorContainerModule } from '../../../components/server-error-container/server-error-container.module';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const routes: Routes = [
   {
@@ -25,6 +26,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     InputWrapperModule,
     ServerErrorContainerModule,
+    MatExpansionModule,
   ],
 })
 export class LessonPageModule { }

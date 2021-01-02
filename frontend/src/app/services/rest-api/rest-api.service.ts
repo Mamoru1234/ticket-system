@@ -5,7 +5,12 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ActivateUserPayload, CreateUserPayload, UserResponse } from './dto/user.endpoint';
 import { CreateGroupPayload, GroupResponse } from './dto/group.endpoint';
-import { CreateLessonPayload, LessonResponse } from './dto/lesson.endpoint';
+import {
+  CreateLessonPayload,
+  CreateLessonVisitPayload,
+  LessonResponse,
+  LessonVisitResponse,
+} from './dto/lesson.endpoint';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +34,14 @@ export class RestApiService {
 
   getAllUsers(): Observable<UserResponse[]> {
     return this.http.get<UserResponse[]>(`${environment.apiUrl}/users/admin/all`);
+  }
+
+  listUsers(userIds: number[]): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>(`${environment.apiUrl}/users/list`, {
+      params: {
+        id: userIds.join(','),
+      },
+    });
   }
 
   createUser(data: CreateUserPayload): Observable<UserResponse> {
@@ -69,5 +82,13 @@ export class RestApiService {
 
   getLessonById(lessonId: string): Observable<LessonResponse> {
     return this.http.get<LessonResponse>(`${environment.apiUrl}/lessons/${lessonId}`);
+  }
+
+  createLessonVisit(lessonId: string, data: CreateLessonVisitPayload): Observable<void> {
+    return this.http.put<void>(`${environment.apiUrl}/lessons/${lessonId}/visit`, data);
+  }
+
+  getLessonVisits(lessonId: string): Observable<LessonVisitResponse[]> {
+    return this.http.get<LessonVisitResponse[]>(`${environment.apiUrl}/lessons/${lessonId}/visits`);
   }
 }

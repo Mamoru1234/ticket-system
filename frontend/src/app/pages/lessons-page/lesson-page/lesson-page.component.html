@@ -3,13 +3,17 @@
   <app-server-error-container
     [error]="pageDataWrapper.error$ | async"
   ></app-server-error-container>
-  <app-loader [loading]="loading$ | async"></app-loader>
+  <app-loader [loading]="pageDataWrapper.isInStatuses(fetchStatus.INIT, fetchStatus.IN_PROGRESS) | async"></app-loader>
   <div *ngIf="pageData$ | async as pageData">
     <div>Група: {{pageData.group.name}}</div>
     <div>Час уроку: {{pageData.lesson.timestamp | date: 'HH:mm EE dd LLL yyyy'}}</div>
   </div>
   <div class="my-2">
     <h4>Студенти на занятті</h4>
+    <app-server-error-container
+      [error]="studentsWrapper.error$ | async"
+    ></app-server-error-container>
+    <app-loader [loading]="studentsWrapper.isInStatuses(fetchStatus.INIT, fetchStatus.IN_PROGRESS) | async"></app-loader>
     <div *ngIf="students$ | async as students">
       <div *ngFor="let student of students">
         {{student.id}}: {{student.lastName}} {{student.firstName}}
@@ -17,35 +21,45 @@
       <div *ngIf="students.length === 0">Немає студентів на занятті</div>
     </div>
   </div>
-  <div>
-    <h4>Пошук за ID</h4>
+  <div *ngIf="searchUser$ | async as searchUser" class="py-2">
+    <div>Відмітити студента:</div>
     <app-server-error-container
-      [error]="searchWrapper.error$ | async"
+      [error]="addVisitWrapper.error$ | async"
     ></app-server-error-container>
-    <div *ngIf="searchUser$ | async as searchUser">
-      <div>Знайдено користувача:</div>
-      <div>{{searchUser.id}}: {{searchUser.lastName}} {{searchUser.firstName}}</div>
-      <button
-        class="btn btn-primary"
-        (click)="addToStudents(searchUser)"
-      >Додати на урок</button>
-    </div>
-    <form [formGroup]="searchByIdForm" (ngSubmit)="searchSubmit()">
-      <app-input-wrapper
-        [control]="searchByIdForm.get('studentId')"
-      >
-        <div class="mb-3">
-          <label for="studentId" class="form-label">ID студента</label>
-          <input type="text" class="form-control" id="studentId" formControlName="studentId">
-        </div>
-      </app-input-wrapper>
-      <button
-        type="submit"
-        class="btn btn-primary w-100"
-        [disabled]="searchLoading$ | async"
-      >
-        Шукати
-      </button>
-    </form>
+    <div>{{searchUser.id}}: {{searchUser.lastName}} {{searchUser.firstName}}</div>
+    <button
+      class="btn btn-primary"
+      [disabled]="addVisitWrapper.isInStatus(fetchStatus.IN_PROGRESS) | async"
+      (click)="addToStudent(searchUser)"
+    >Додати на урок</button>
+  </div>
+  <div>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        Пошук за ID
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <app-server-error-container
+          [error]="searchWrapper.error$ | async"
+        ></app-server-error-container>
+        <form [formGroup]="searchByIdForm" (ngSubmit)="searchSubmit()">
+          <app-input-wrapper
+            [control]="searchByIdForm.get('studentId')"
+          >
+            <div class="mb-3">
+              <label for="studentId" class="form-label">ID студента</label>
+              <input type="text" class="form-control" id="studentId" formControlName="studentId">
+            </div>
+          </app-input-wrapper>
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+            [disabled]="studentsWrapper.isInStatus(fetchStatus.IN_PROGRESS) | async"
+          >
+            Шукати
+          </button>
+        </form>
+      </ng-template>
+    </mat-expansion-panel>
   </div>
 </app-landing>

@@ -3,6 +3,7 @@ import { GroupTeacherEntity } from './group-teacher.entity';
 import { StudentGroupEntity } from './student-group.entity';
 import { UserEntity } from './user.entity';
 import { LessonEntity } from './lesson.entity';
+import { LessonVisitEntity } from './lesson-visit.entity';
 
 export const ENTITY_LIST = [
   GroupMemberEntity,
@@ -10,4 +11,5 @@ export const ENTITY_LIST = [
   StudentGroupEntity,
   UserEntity,
   LessonEntity,
+  LessonVisitEntity,
 ];

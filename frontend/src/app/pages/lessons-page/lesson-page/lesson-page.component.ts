@@ -30,15 +30,16 @@ export class LessonPageComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
   ) { }
   pageDataWrapper = this.fetchService.createWrapper();
-  loading$ = this.pageDataWrapper.isInStatuses(FetchStatus.INIT, FetchStatus.IN_PROGRESS);
   pageData$ = new BehaviorSubject<PageData | null>(null);
+  addVisitWrapper = this.fetchService.createWrapper();
+  fetchStatus = FetchStatus;
+  studentsWrapper = this.fetchService.createWrapper();
   students$ = new BehaviorSubject<UserResponse[]>([]);
   searchByIdForm = this.formBuilder.group({
     studentId: [null, Validators.required],
   });
   searchWrapper = this.fetchService.createWrapper();
   searchUser$ = new BehaviorSubject<UserResponse | null>(null);
-  searchLoading$ = this.searchWrapper.isInStatus(FetchStatus.IN_PROGRESS);
   ngOnInit(): void {
     const pageData: Partial<PageData> = {};
     const dataFetch$ = this.restApiService.getLessonById(this.getLessonId())
@@ -46,6 +47,7 @@ export class LessonPageComponent implements OnInit {
         pageData.lesson = lesson;
         return this.restApiService.getGroupById(lesson.groupId);
       }));
+    this.getStudents();
     this.pageDataWrapper.fetch(dataFetch$)
       .subscribe({
         next: (group) => {
@@ -63,21 +65,41 @@ export class LessonPageComponent implements OnInit {
     if (!this.searchByIdForm.valid) {
       return;
     }
+    this.searchByIdForm.disable();
     this.searchWrapper.fetch(this.restApiService.getById(this.searchByIdForm.value.studentId))
       .subscribe({
         next: (user) => {
           this.searchUser$.next(user);
+          this.searchByIdForm.enable();
+          this.searchByIdForm.reset();
         }
       });
   }
 
-  addToStudents(student: UserResponse): void {
-    const students = this.students$.getValue();
-    const isInStudents = students.some((it) => it.id === student.id);
-    if (isInStudents) {
-      return;
-    }
-    this.students$.next(this.students$.getValue().concat([student]));
-    this.searchUser$.next(null);
+  addToStudent(student: UserResponse): void {
+    this.addVisitWrapper.fetch(this.restApiService.createLessonVisit(this.getLessonId(), {
+      userId: student.id,
+    })).subscribe({
+      next: () => {
+        this.getStudents();
+        this.searchUser$.next(null);
+      },
+    });
+  }
+
+  getStudents(): void {
+    const data$ = this.restApiService.getLessonVisits(this.getLessonId())
+      .pipe(
+        switchMap((visits) => {
+          const userIds = visits.map((it) => it.studentId);
+          return this.restApiService.listUsers(userIds);
+        })
+      );
+    this.studentsWrapper.fetch(data$)
+      .subscribe({
+        next: (visits) => {
+          this.students$.next(visits);
+        },
+      });
   }
 }

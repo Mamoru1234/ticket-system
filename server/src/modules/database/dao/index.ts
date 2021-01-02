@@ -3,6 +3,7 @@ import { GroupTeacherDao } from './group-teacher.dao';
 import { StudentGroupDao } from './student-group.dao';
 import { UserDao } from './user.dao';
 import { LessonDao } from './lesson.dao';
+import { LessonVisitDao } from './lesson-visit.dao';
 
 export const DAO_LIST = [
   GroupMemberDao,
@@ -10,4 +11,5 @@ export const DAO_LIST = [
   StudentGroupDao,
   UserDao,
   LessonDao,
+  LessonVisitDao,
 ];

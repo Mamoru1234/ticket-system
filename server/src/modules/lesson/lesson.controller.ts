@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../../guards/role.guard';
 import { Role } from '../../decorators/role.decorator';
@@ -10,6 +10,8 @@ import { LessonService } from './lesson.service';
 import { CreateLessonPayload } from './dto/create-lesson.payload';
 import { plainToClass } from 'class-transformer';
 import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.options';
+import { AddLessonVisitPayload } from './dto/add-lesson-visit.payload';
+import { LessonVisitResponse } from '../../dto/lesson-visit.response';
 
 @Controller('lessons')
 export class LessonController {
@@ -48,5 +50,27 @@ export class LessonController {
   ): Promise<LessonResponse> {
     const lesson = await this.lessonService.getById(lessonId, user);
     return plainToClass(LessonResponse, lesson, DEFAULT_TRANSFORM_OPTIONS);
+  }
+
+  @Put('/:lessonId/visit')
+  @Role(UserRole.TEACHER)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  async addLessonVisit(
+    @Param('lessonId') lessonId: string,
+    @Body() data: AddLessonVisitPayload,
+    @User() user: UserEntity,
+  ): Promise<void> {
+    await this.lessonService.addLessonVisit(lessonId, data, user);
+  }
+
+  @Get('/:lessonId/visits')
+  @Role(UserRole.TEACHER)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  async getLessonVisits(
+    @Param('lessonId') lessonId: string,
+    @User() user: UserEntity,
+  ): Promise<LessonVisitResponse[]> {
+    const visits = await this.lessonService.getStudentVisits(lessonId, user);
+    return plainToClass(LessonVisitResponse, visits, DEFAULT_TRANSFORM_OPTIONS);
   }
 }

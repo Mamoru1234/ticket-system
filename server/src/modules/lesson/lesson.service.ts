@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { LessonEntity } from '../database/entity/lesson.entity';
 import { CreateLessonPayload } from './dto/create-lesson.payload';
 import { UserEntity } from '../database/entity/user.entity';
@@ -6,6 +6,10 @@ import { StudentGroupDao } from '../database/dao/student-group.dao';
 import { Connection } from 'typeorm';
 import { StudentGroupService } from '../student-group/student-group.service';
 import { LessonDao } from '../database/dao/lesson.dao';
+import { AddLessonVisitPayload } from './dto/add-lesson-visit.payload';
+import { LessonVisitDao } from '../database/dao/lesson-visit.dao';
+import { UserDao } from '../database/dao/user.dao';
+import { LessonVisitEntity } from '../database/entity/lesson-visit.entity';
 
 @Injectable()
 export class LessonService {
@@ -14,6 +18,8 @@ export class LessonService {
     private readonly studentGroupService: StudentGroupService,
     private readonly connection: Connection,
     private readonly lessonDao: LessonDao,
+    private readonly lessonVisitDao: LessonVisitDao,
+    private readonly userDao: UserDao,
   ) {
   }
   async createLesson(data: CreateLessonPayload, user: UserEntity): Promise<LessonEntity> {
@@ -45,5 +51,51 @@ export class LessonService {
     // to validate lesson access
     await this.studentGroupService.getById(lesson.groupId, user);
     return lesson;
+  }
+
+  async addLessonVisit(lessonId: string, data: AddLessonVisitPayload, user: UserEntity): Promise<void> {
+    const lesson = await this.lessonDao.findOne(this.connection.manager, {
+      where: {
+        id: lessonId,
+      },
+    });
+    // to validate lesson access
+    await this.studentGroupService.getById(lesson.groupId, user);
+    const student = await this.userDao.findOne(this.connection.manager, {
+      where: {
+        id: data.userId
+      },
+    });
+    if (!student) {
+      throw new BadRequestException(`User with id ${data.userId} not found`);
+    }
+    const visit = await this.lessonVisitDao.findOne(this.connection.manager, {
+      where: {
+        student,
+        lesson,
+      },
+    });
+    if (visit) {
+      throw new BadRequestException('User already marked as visited');
+    }
+    await this.lessonVisitDao.save(this.connection.manager, {
+      lesson,
+      student,
+    });
+  }
+
+  async getStudentVisits(lessonId: string, user: UserEntity): Promise<LessonVisitEntity[]> {
+    const lesson = await this.lessonDao.findOne(this.connection.manager, {
+      where: {
+        id: lessonId,
+      },
+    });
+    // to validate lesson access
+    await this.studentGroupService.getById(lesson.groupId, user);
+    return this.lessonVisitDao.find(this.connection.manager, {
+      where: {
+        lesson,
+      },
+    });
   }
 }
