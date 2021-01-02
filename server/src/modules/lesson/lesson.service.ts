@@ -35,4 +35,15 @@ export class LessonService {
       },
     });
   }
+
+  async getById(lessonId: string, user: UserEntity): Promise<LessonEntity> {
+    const lesson = await this.lessonDao.findOne(this.connection.manager, {
+      where: {
+        id: lessonId,
+      },
+    });
+    // to validate lesson access
+    await this.studentGroupService.getById(lesson.groupId, user);
+    return lesson;
+  }
 }

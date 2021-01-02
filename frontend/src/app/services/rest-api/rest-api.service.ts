@@ -66,4 +66,8 @@ export class RestApiService {
   createLesson(data: CreateLessonPayload): Observable<LessonResponse> {
     return this.http.post<LessonResponse>(`${environment.apiUrl}/lessons/create`, data);
   }
+
+  getLessonById(lessonId: string): Observable<LessonResponse> {
+    return this.http.get<LessonResponse>(`${environment.apiUrl}/lessons/${lessonId}`);
+  }
 }

@@ -14,25 +14,34 @@
     Server error: {{error.message}}
   </div>
   <div *ngIf="pageData$ | async as pageData">
-    <h3>Group: {{pageData.group.name}}</h3>
+    <h3>Група: {{pageData.group.name}}</h3>
     <div class="d-flex justify-content-end py-1">
       <button
         class="btn btn-primary"
-        routerLink="/lessons/create"
-        [queryParams]="{groupId: pageData.group.id}"
+        [routerLink]="'/lessons/create/' + pageData.group.id"
       >
-        Add lesson
+        Додати урок
       </button>
     </div>
     <div>
-      <h4>Lessons</h4>
-      <div
-        *ngFor="let lesson of pageData.lessons"
-      >
-        {{lesson.timestamp}}
+      <h4>Уроки</h4>
+      <div class="row row-cols-1 row-cols-md-4">
+        <div
+          *ngFor="let lesson of pageData.lessons"
+          class="col pb-1"
+        >
+          <div
+            class="card"
+            [routerLink]="'/lessons/manage/' + lesson.id"
+          >
+            <div class="card-body">
+              {{lesson.timestamp | date: 'HH:mm EE dd LLL yyyy'}}
+            </div>
+          </div>
+        </div>
       </div>
       <div *ngIf="pageData.lessons.length === 0">
-        No lessons for group
+        Немає ще уроків в цій групі
       </div>
     </div>
   </div>

@@ -38,4 +38,15 @@ export class LessonController {
     const lessons = await this.lessonService.getLessonsByGroup(groupId, user);
     return plainToClass(LessonResponse, lessons, DEFAULT_TRANSFORM_OPTIONS);
   }
+
+  @Get(':lessonId')
+  @Role(UserRole.TEACHER)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  async getById(
+    @Param('lessonId') lessonId: string,
+    @User() user: UserEntity,
+  ): Promise<LessonResponse> {
+    const lesson = await this.lessonService.getById(lessonId, user);
+    return plainToClass(LessonResponse, lesson, DEFAULT_TRANSFORM_OPTIONS);
+  }
 }

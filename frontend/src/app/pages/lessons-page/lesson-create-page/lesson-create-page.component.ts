@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FetchService, FetchStatus } from '../../../services/fetch.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RestApiService } from '../../../services/rest-api/rest-api.service';
 
 @Component({
@@ -19,23 +18,20 @@ export class LessonCreatePageComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly activatedRoute: ActivatedRoute,
     private readonly restApi: RestApiService,
+    private readonly router: Router,
   ) { }
   private readonly createLessonWrapper = this.fetchService.createWrapper();
-  error$ = this.createLessonWrapper.error$.pipe(map(FetchService.httpErrorMapper));
+  error$ = this.createLessonWrapper.error$;
   loading$ = this.createLessonWrapper.isInStatus(FetchStatus.IN_PROGRESS);
   createLessonForm = this.formBuilder.group({
-    groupId: [null, Validators.required],
     timestamp: [null, Validators.required],
   });
 
   ngOnInit(): void {
-    if (this.getGroupId()) {
-      this.createLessonForm.get('groupId')?.setValue(this.getGroupId());
-    }
   }
 
   getGroupId(): string {
-    return this.activatedRoute.snapshot.queryParams.groupId;
+    return this.activatedRoute.snapshot.params.groupId;
   }
 
   submit(): void {
@@ -43,12 +39,13 @@ export class LessonCreatePageComponent implements OnInit {
       return;
     }
     this.createLessonWrapper.fetch(this.restApi.createLesson({
-      groupId: this.createLessonForm.value.groupId,
-      timestamp: +this.createLessonForm.value.timestamp,
+      groupId: this.getGroupId(),
+      timestamp: Date.parse(this.createLessonForm.value.timestamp),
     })).subscribe({
       next: (lesson) => {
-        console.log(lesson);
-      }
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate([`/groups/${lesson.groupId}`]);
+      },
     });
   }
 }

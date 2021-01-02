@@ -9,7 +9,7 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: 'create',
+        path: 'create/:groupId',
         loadChildren: () => import('./lesson-create-page/lesson-create-page.module').then(m => m.LessonCreatePageModule),
         canActivate: [UserRoleGuard],
         data: {
@@ -17,13 +17,13 @@ const routes: Routes = [
         },
       },
       {
-        path: 'group/:groupId',
-        loadChildren: () => import('./group-lessons-page/group-lessons-page.module').then((m) => m.GroupLessonsPageModule),
+        path: 'manage/:lessonId',
+        loadChildren: () => import('./lesson-page/lesson-page.module').then(m => m.LessonPageModule),
         canActivate: [UserRoleGuard],
         data: {
           requiredRole: UserRole.TEACHER,
         },
-      },
+      }
     ],
   }
 ];

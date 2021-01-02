@@ -1,20 +1,18 @@
 <app-landing>
-  <h3>Create new lesson</h3>
-  <div
-    *ngIf="error$ | async as error"
-    class="alert alert-danger"
-    role="alert"
-  >
-    Server error: {{error.message}}
-  </div>
+  <h3>Створити урок</h3>
+  <app-server-error-container [error]="error$ | async"></app-server-error-container>
   <form [formGroup]="createLessonForm" (ngSubmit)="submit()">
     <div class="mb-3">
-      <label for="group" class="form-label">Group</label>
-      <input type="text" class="form-control" id="group" formControlName="groupId">
-    </div>
-    <div class="mb-3">
-      <label for="time" class="form-label">Time</label>
-      <input type="text" class="form-control" id="time" formControlName="timestamp">
+      <mat-form-field>
+        <label for="time" class="form-label">Час уроку</label>
+        <input
+          type="datetime-local"
+          class="form-control"
+          id="time"
+          formControlName="timestamp"
+          matInput
+        >
+      </mat-form-field>
     </div>
 
     <button
@@ -22,7 +20,7 @@
       class="btn btn-primary w-100"
       [disabled]="loading$ | async"
     >
-      Create lesson
+      Створити
     </button>
   </form>
 </app-landing>

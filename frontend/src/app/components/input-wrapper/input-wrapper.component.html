@@ -1,7 +1,7 @@
-<ng-container>
+<ng-container *ngIf="control">
   <ng-content></ng-content>
 <!--  <div>errors: {{control.errors | json}}</div>-->
-  <div *ngIf="control.invalid && control.touched"
+  <div *ngIf="control.invalid && control.touched && control.errors"
        class="alert alert-danger mt-1">
 
     <div *ngIf="control.errors.required">

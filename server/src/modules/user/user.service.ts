@@ -22,12 +22,16 @@ export class UserService {
     return this.userDao.find(this.connection.manager);
   }
 
-  getById(userId: number): Promise<UserEntity> {
-    return this.userDao.findOne(this.connection.manager, {
+  async getById(userId: number): Promise<UserEntity> {
+    const user = await this.userDao.findOne(this.connection.manager, {
       where: {
         id: userId,
       },
     });
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    return user;
   }
 
   createUser(payload: CreateUserPayload): Promise<UserEntity> {

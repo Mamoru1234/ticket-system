@@ -1,30 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LessonCreatePageComponent } from './lesson-create-page.component';
-import { LandingModule } from '../../../components/landing/landing.module';
+import { LessonPageComponent } from './lesson-page.component';
 import { RouterModule, Routes } from '@angular/router';
+import { LandingModule } from '../../../components/landing/landing.module';
+import { LoaderModule } from '../../../components/loader/loader.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InputWrapperModule } from '../../../components/input-wrapper/input-wrapper.module';
 import { ServerErrorContainerModule } from '../../../components/server-error-container/server-error-container.module';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
 const routes: Routes = [
   {
     path: '',
-    component: LessonCreatePageComponent,
-  },
+    component: LessonPageComponent,
+  }
 ];
 
 @NgModule({
-  declarations: [LessonCreatePageComponent],
+  declarations: [LessonPageComponent],
   imports: [
     CommonModule,
-    LandingModule,
     RouterModule.forChild(routes),
+    LandingModule,
+    LoaderModule,
     ReactiveFormsModule,
+    InputWrapperModule,
     ServerErrorContainerModule,
-    MatFormFieldModule,
-    MatInputModule,
   ],
 })
-export class LessonCreatePageModule { }
+export class LessonPageModule { }
