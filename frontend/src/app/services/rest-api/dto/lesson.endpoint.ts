@@ -18,4 +18,5 @@ export interface LessonVisitResponse {
   id: string;
   studentId: number;
   lessonId: string;
+  ticketId?: string;
 }

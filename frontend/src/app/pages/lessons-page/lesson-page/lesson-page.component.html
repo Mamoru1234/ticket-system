@@ -5,7 +5,7 @@
   ></app-server-error-container>
   <app-loader [loading]="pageDataWrapper.isInStatuses(fetchStatus.INIT, fetchStatus.IN_PROGRESS) | async"></app-loader>
   <div *ngIf="pageData$ | async as pageData">
-    <div>Група: {{pageData.group.name}}</div>
+    <div>Група: <a [routerLink]="'/groups/' + pageData.group.id">{{pageData.group.name}}</a></div>
     <div>Час уроку: {{pageData.lesson.timestamp | date: 'HH:mm EE dd LLL yyyy'}}</div>
   </div>
   <div class="my-2">
@@ -14,11 +14,16 @@
       [error]="studentsWrapper.error$ | async"
     ></app-server-error-container>
     <app-loader [loading]="studentsWrapper.isInStatuses(fetchStatus.INIT, fetchStatus.IN_PROGRESS) | async"></app-loader>
-    <div *ngIf="students$ | async as students">
-      <div *ngFor="let student of students">
-        {{student.id}}: {{student.lastName}} {{student.firstName}}
+    <div *ngIf="students$ | async as studentVisits">
+      <div
+        *ngFor="let studentVisit of studentVisits"
+        class="py-1"
+        [routerLink]="'/users/manage/' + studentVisit.student.id"
+      >
+        {{studentVisit.student.id}}: {{studentVisit.student.lastName}} {{studentVisit.student.firstName}}
+        <span class="text-danger" *ngIf="studentVisit.visit.ticketId == null">Борг</span>
       </div>
-      <div *ngIf="students.length === 0">Немає студентів на занятті</div>
+      <div *ngIf="studentVisits.length === 0" class="p-2 text-warning">Немає студентів на занятті</div>
     </div>
   </div>
   <div *ngIf="searchData$ | async as searchData" class="py-2">

@@ -9,4 +9,7 @@ export class LessonVisitResponse {
 
   @Expose()
   lessonId: string;
+
+  @Expose()
+  ticketId: string;
 }

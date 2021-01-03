@@ -1,11 +1,15 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FetchService, FetchStatus } from '../../../services/fetch.service';
-import { CreateLessonVisitPayload, LessonResponse } from 'src/app/services/rest-api/dto/lesson.endpoint';
+import {
+  CreateLessonVisitPayload,
+  LessonResponse,
+  LessonVisitResponse,
+} from 'src/app/services/rest-api/dto/lesson.endpoint';
 import { RestApiService } from '../../../services/rest-api/rest-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { GroupResponse } from '../../../services/rest-api/dto/group.endpoint';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { UserResponse } from '../../../services/rest-api/dto/user.endpoint';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TicketResponse } from '../../../services/rest-api/dto/ticket.endpoint';
@@ -33,6 +37,11 @@ const BORG_ITEM: TicketItem = {
   value: BORG,
 };
 
+export interface StudentVisit {
+  student: UserResponse;
+  visit: LessonVisitResponse;
+}
+
 @Component({
   selector: 'app-lesson-page',
   templateUrl: './lesson-page.component.html',
@@ -54,7 +63,7 @@ export class LessonPageComponent implements OnInit {
   addVisitWrapper = this.fetchService.createWrapper();
   fetchStatus = FetchStatus;
   studentsWrapper = this.fetchService.createWrapper();
-  students$ = new BehaviorSubject<UserResponse[]>([]);
+  students$ = new BehaviorSubject<StudentVisit[]>([]);
   searchByIdForm = this.formBuilder.group({
     studentId: [null, Validators.required],
   });
@@ -134,9 +143,20 @@ export class LessonPageComponent implements OnInit {
         switchMap((visits) => {
           const userIds = visits.map((it) => it.studentId);
           if (userIds.length === 0) {
-            return of([]);
+            return of([] as StudentVisit[]);
           }
-          return this.restApiService.listUsers(userIds);
+          return this.restApiService.listUsers(userIds).pipe(map((users): StudentVisit[] => {
+            return visits.map((it): StudentVisit => {
+              const student = users.find((itUser) => itUser.id === it.studentId);
+              if (!student) {
+                throw new Error('Student not found');
+              }
+              return ({
+                visit: it,
+                student,
+              })
+            });
+          }));
         })
       );
     this.studentsWrapper.fetch(data$)
@@ -145,9 +165,5 @@ export class LessonPageComponent implements OnInit {
           this.students$.next(visits);
         },
       });
-  }
-
-  private formatDate(timestamp: number): string {
-    return new Date().toLocaleDateString();
   }
 }
