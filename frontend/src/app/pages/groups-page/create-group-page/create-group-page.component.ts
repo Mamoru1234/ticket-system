@@ -5,6 +5,7 @@ import { RestApiService } from '../../../services/rest-api/rest-api.service';
 import { finalize, map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { GroupResponse } from '../../../services/rest-api/dto/group.endpoint';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-group-page',
@@ -19,6 +20,7 @@ export class CreateGroupPageComponent implements OnInit {
     private readonly fetchService: FetchService,
     private readonly formBuilder: FormBuilder,
     private readonly restApiService: RestApiService,
+    private readonly router: Router,
   ) { }
   createGroupForm = this.formBuilder.group({
     name: [null, Validators.required],
@@ -43,6 +45,8 @@ export class CreateGroupPageComponent implements OnInit {
         next: group => {
           this.createdGroup$.next(group);
           this.createGroupForm.reset();
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate([`/groups/${group.id}`]);
         },
       });
   }

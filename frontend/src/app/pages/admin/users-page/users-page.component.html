@@ -1,12 +1,12 @@
 <app-landing >
   <div>
-    <h3>Users</h3>
+    <h3>Користувачі</h3>
     <div class="d-flex justify-content-end py-1">
       <button
         class="btn btn-primary"
         [routerLink]="'/admin/create-user'"
       >
-        Add user
+        Створити користувача
       </button>
     </div>
     <div
@@ -17,7 +17,10 @@
         class="col pb-1"
         *ngFor="let user of users"
       >
-        <div class="card">
+        <div
+          class="card"
+          [routerLink]="'/users/manage/' + user.id"
+        >
           <div class="card-body">
             <div class="d-flex justify-content-center">
               <div>{{user.lastName}} {{user.firstName}}</div>
@@ -25,9 +28,9 @@
                 *ngIf="!user.email"
                 class="user-select-none pl-1 text-primary"
                 [routerLink]="'/users/activate/' + user.id"
-              >Activate</div>
+              >Активація</div>
             </div>
-            <div class="text-center">Role: {{user.role}}</div>
+            <div class="text-center">Роль: {{user.role}}</div>
           </div>
         </div>
       </div>

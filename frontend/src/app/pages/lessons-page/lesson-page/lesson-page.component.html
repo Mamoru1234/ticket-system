@@ -21,16 +21,33 @@
       <div *ngIf="students.length === 0">Немає студентів на занятті</div>
     </div>
   </div>
-  <div *ngIf="searchUser$ | async as searchUser" class="py-2">
+  <div *ngIf="searchData$ | async as searchData" class="py-2">
     <div>Відмітити студента:</div>
     <app-server-error-container
       [error]="addVisitWrapper.error$ | async"
     ></app-server-error-container>
-    <div>{{searchUser.id}}: {{searchUser.lastName}} {{searchUser.firstName}}</div>
+    <div>{{searchData.user.id}}: {{searchData.user.lastName}} {{searchData.user.firstName}}</div>
+    <app-input-wrapper
+      [control]="ticketControl"
+    >
+      <mat-form-field
+        appearance="outline"
+        class="w-100"
+      >
+        <mat-label>Оплата</mat-label>
+        <mat-select
+          [formControl]="ticketControl"
+        >
+          <mat-option *ngFor="let item of ticketItems$ | async" [value]="item.value">
+            {{item.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </app-input-wrapper>
     <button
       class="btn btn-primary"
       [disabled]="addVisitWrapper.isInStatus(fetchStatus.IN_PROGRESS) | async"
-      (click)="addToStudent(searchUser)"
+      (click)="addToStudent(searchData.user)"
     >Додати на урок</button>
   </div>
   <div>
@@ -54,7 +71,7 @@
           <button
             type="submit"
             class="btn btn-primary w-100"
-            [disabled]="studentsWrapper.isInStatus(fetchStatus.IN_PROGRESS) | async"
+            [disabled]="searchWrapper.isInStatus(fetchStatus.IN_PROGRESS) | async"
           >
             Шукати
           </button>

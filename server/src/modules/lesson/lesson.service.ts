@@ -10,6 +10,8 @@ import { AddLessonVisitPayload } from './dto/add-lesson-visit.payload';
 import { LessonVisitDao } from '../database/dao/lesson-visit.dao';
 import { UserDao } from '../database/dao/user.dao';
 import { LessonVisitEntity } from '../database/entity/lesson-visit.entity';
+import { TicketDao } from '../database/dao/ticket.dao';
+import { TicketEntity } from '../database/entity/ticket.entity';
 
 @Injectable()
 export class LessonService {
@@ -20,6 +22,7 @@ export class LessonService {
     private readonly lessonDao: LessonDao,
     private readonly lessonVisitDao: LessonVisitDao,
     private readonly userDao: UserDao,
+    private readonly ticketDao: TicketDao,
   ) {
   }
   async createLesson(data: CreateLessonPayload, user: UserEntity): Promise<LessonEntity> {
@@ -78,9 +81,25 @@ export class LessonService {
     if (visit) {
       throw new BadRequestException('User already marked as visited');
     }
+    let ticket: TicketEntity;
+    if (data.ticketId) {
+      ticket = await this.ticketDao.findOne(this.connection.manager, {
+        where: {
+          id: data.ticketId,
+          student,
+        },
+      });
+      if (ticket.visitsLeft === 0) {
+        throw new BadRequestException('You cannot use expired ticket');
+      }
+      ticket.visitsLeft--;
+      await this.ticketDao.save(this.connection.manager, ticket);
+    }
     await this.lessonVisitDao.save(this.connection.manager, {
       lesson,
       student,
+      ticket,
+      markedBy: user,
     });
   }
 

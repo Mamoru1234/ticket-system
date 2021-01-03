@@ -11,6 +11,7 @@ import {
   LessonResponse,
   LessonVisitResponse,
 } from './dto/lesson.endpoint';
+import { CreateTicketPayload, TicketResponse } from './dto/ticket.endpoint';
 
 @Injectable({
   providedIn: 'root',
@@ -90,5 +91,17 @@ export class RestApiService {
 
   getLessonVisits(lessonId: string): Observable<LessonVisitResponse[]> {
     return this.http.get<LessonVisitResponse[]>(`${environment.apiUrl}/lessons/${lessonId}/visits`);
+  }
+
+  createTicket(data: CreateTicketPayload): Observable<TicketResponse> {
+    return this.http.put<TicketResponse>(`${environment.apiUrl}/tickets/create`, data);
+  }
+
+  getAllUserTickets(userId: number): Observable<TicketResponse[]> {
+    return this.http.get<TicketResponse[]>(`${environment.apiUrl}/tickets/by-user/${userId}`);
+  }
+
+  getAvailableUserTickets(userId: number): Observable<TicketResponse[]> {
+    return this.http.get<TicketResponse[]>(`${environment.apiUrl}/tickets/available/${userId}`);
   }
 }

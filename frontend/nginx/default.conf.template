@@ -5,7 +5,7 @@ server {
   listen 80;
   root /user/app/dist;
   location /api/v1 {
-    limit_req zone=backend burst=10;
+    limit_req zone=backend burst=20;
     proxy_pass $API_URL;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     # kill cache
@@ -16,7 +16,7 @@ server {
     etag off;
   }
   location / {
-    limit_req zone=frontend burst=10;
+    limit_req zone=frontend burst=50;
     try_files $uri /index.html;
   }
 }

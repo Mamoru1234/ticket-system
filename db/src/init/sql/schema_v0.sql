@@ -22,10 +22,23 @@ CREATE TABLE lesson(
   "timestamp" BIGINT NOT NULL DEFAULT 0
 );
 
+CREATE TABLE ticket(
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  "createdTimestamp" BIGINT NOT NULL DEFAULT 0,
+  "validFromTimestamp" BIGINT NOT NULL DEFAULT 0,
+  "validToTimestamp" BIGINT NOT NULL DEFAULT 0,
+  "visitsLeft" INT NOT NULL DEFAULT 0,
+  "visitsTotal" INT NOT NULL DEFAULT 0,
+  "createdById" INT REFERENCES users,
+  "studentId" INT REFERENCES users
+);
+
 CREATE TABLE "lessonVisit" (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   "lessonId" UUID REFERENCES "lesson",
-  "studentId" INT REFERENCES users
+  "ticketId" UUID REFERENCES "ticket",
+  "studentId" INT REFERENCES users,
+  "markedById" INT REFERENCES users
 );
 
 CREATE TABLE "studentGroupTeachers" (

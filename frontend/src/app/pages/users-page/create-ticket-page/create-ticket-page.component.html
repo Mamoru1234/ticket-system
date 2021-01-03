@@ -1,0 +1,48 @@
+<app-landing>
+  <h3>Виписати абонемент</h3>
+  <app-server-error-container
+    [error]="pageDataWrapper.error$ | async"
+  ></app-server-error-container>
+  <app-server-error-container
+    [error]="createTicketWrapper.error$ | async"
+  ></app-server-error-container>
+  <div class="card" *ngIf="pageData$ | async as pageData">
+    <div class="card-body">
+      <div class="font-weight-bold">Студенту</div>
+      <div>{{pageData.id}}: {{pageData.lastName}} {{pageData.firstName}}</div>
+    </div>
+  </div>
+  <form [formGroup]="createTicketForm" (ngSubmit)="submit()">
+    <app-input-wrapper
+      [control]="createTicketForm.get('visits')"
+    >
+      <div class="form-group">
+        <label for="visits">Кількість занять</label>
+        <input type="number" class="form-control" id="visits" formControlName="visits">
+      </div>
+    </app-input-wrapper>
+    <app-input-wrapper
+      [control]="createTicketForm.get('validFrom')"
+    >
+      <div class="form-group">
+        <label for="validFrom">Початкова дата</label>
+        <input type="date" class="form-control" id="validFrom" formControlName="validFrom">
+      </div>
+    </app-input-wrapper>
+    <app-input-wrapper
+      [control]="createTicketForm.get('validTo')"
+    >
+      <div class="form-group">
+        <label for="validTo">Кінцева дата</label>
+        <input type="date" class="form-control" id="validTo" formControlName="validTo">
+      </div>
+    </app-input-wrapper>
+    <button
+      type="submit"
+      class="btn btn-primary w-100"
+      [disabled]="createTicketWrapper.isInStatus(fetchStatus.IN_PROGRESS) | async"
+    >
+      Створити
+    </button>
+  </form>
+</app-landing>

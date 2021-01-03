@@ -9,7 +9,7 @@ import { AbstractControl, FormGroupDirective } from '@angular/forms';
 export class InputWrapperComponent implements OnInit {
   @Input() control!: AbstractControl | null;
 
-  constructor(@SkipSelf() private readonly formGroupDirective: FormGroupDirective) { }
+  constructor() { }
 
   ngOnInit(): void {
   }

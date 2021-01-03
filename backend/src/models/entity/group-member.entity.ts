@@ -19,5 +19,5 @@ export class GroupMemberEntity {
   student!: UserEntity;
 
   @Column('studentId')
-  studentId!: string;
+  studentId!: number;
 }

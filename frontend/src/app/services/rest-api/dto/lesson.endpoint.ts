@@ -11,6 +11,7 @@ export interface CreateLessonPayload {
 
 export interface CreateLessonVisitPayload {
   userId: number;
+  ticketId?: string;
 }
 
 export interface LessonVisitResponse {

@@ -1,0 +1,41 @@
+<app-landing>
+  <h3>Сторінка користувача</h3>
+  <app-loader
+    [loading]="pageDataWrapper.isInStatuses(fetchStatus.IN_PROGRESS, fetchStatus.INIT) | async"
+  >
+  </app-loader>
+  <app-server-error-container
+    [error]="pageDataWrapper.error$ | async"
+  ></app-server-error-container>
+  <ng-container
+    *ngIf="pageData$ | async as pageData"
+  >
+    <div class="card">
+      <div class="card-body">
+        <div class="font-weight-bold">Данні</div>
+        <div>ID: {{pageData.user.id}}</div>
+        <div>{{pageData.user.lastName}} {{pageData.user.firstName}}</div>
+        <div *ngIf="pageData.user.email">Email: {{pageData.user.email}}</div>
+      </div>
+    </div>
+    <div class="mt-2 card">
+      <div class="card-body">
+        <div class="font-weight-bold">Абонементи:</div>
+        <div class="d-flex justify-content-end py-1">
+          <button
+            class="btn btn-primary"
+            [routerLink]="'/users/tickets/create/' + pageData.user.id"
+          >
+            Додати абонемент
+          </button>
+        </div>
+        <div *ngFor="let ticket of pageData.tickets" class="my-1 p-1 border rounded">
+          <div>Створений {{ticket.createdTimestamp | date}}</div>
+          <div>Період {{ticket.validFromTimestamp | date}} - {{ticket.validToTimestamp | date}}</div>
+          <div>Занять доступно {{ticket.visitsLeft}}</div>
+        </div>
+        <div *ngIf="pageData.tickets.length === 0">Немає абонементів</div>
+      </div>
+    </div>
+  </ng-container>
+</app-landing>

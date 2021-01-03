@@ -43,13 +43,13 @@ export class AppHeaderComponent implements OnInit {
         const items: HeaderItem[] = [];
         if (RoleHelper.hasRole(user.role, UserRole.TEACHER)) {
           items.push({
-            label: 'Teacher groups',
+            label: 'Групи',
             url: '/groups/teacher',
           });
         }
         if (RoleHelper.hasRole(user.role, UserRole.ADMIN)) {
           items.push({
-            label: 'users',
+            label: 'Користувачі',
             url: '/admin/users',
           });
         }
