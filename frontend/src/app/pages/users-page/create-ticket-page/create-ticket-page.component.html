@@ -29,6 +29,21 @@
         <input type="date" class="form-control" id="validFrom" formControlName="validFrom">
       </div>
     </app-input-wrapper>
+    <div>
+      <div class="text-secondary">Швидке заповнення кінцевої дати</div>
+      <div class="btn-group-sm" role="group" aria-label="Basic example">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="rangeClick(dateRange.WEEK)"
+        >1 тиждень</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="rangeClick(dateRange.MONTH)"
+        >4 тижні</button>
+      </div>
+    </div>
     <app-input-wrapper
       [control]="createTicketForm.get('validTo')"
     >
