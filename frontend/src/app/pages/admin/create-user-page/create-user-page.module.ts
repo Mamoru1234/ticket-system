@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { InputWrapperModule } from '../../../components/input-wrapper/input-wrapper.module';
+import { ServerErrorContainerModule } from '../../../components/server-error-container/server-error-container.module';
 
 @NgModule({
   declarations: [CreateUserPageComponent],
@@ -18,6 +19,7 @@ import { InputWrapperModule } from '../../../components/input-wrapper/input-wrap
     MatFormFieldModule,
     MatSelectModule,
     InputWrapperModule,
+    ServerErrorContainerModule,
   ],
 })
 export class CreateUserPageModule { }

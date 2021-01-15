@@ -104,4 +104,8 @@ export class RestApiService {
   getAvailableUserTickets(userId: number): Observable<TicketResponse[]> {
     return this.http.get<TicketResponse[]>(`${environment.apiUrl}/tickets/available/${userId}`);
   }
+
+  getLessonStudentRecommendations(lessonId: string): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>(`${environment.apiUrl}/lessons/${lessonId}/recommended-students`);
+  }
 }

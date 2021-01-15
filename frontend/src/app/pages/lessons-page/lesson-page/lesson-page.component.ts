@@ -63,6 +63,8 @@ export class LessonPageComponent implements OnInit {
   addVisitWrapper = this.fetchService.createWrapper();
   fetchStatus = FetchStatus;
   studentsWrapper = this.fetchService.createWrapper();
+  recommendationsWrapper = this.fetchService.createWrapper();
+  recommendations$ = new BehaviorSubject<UserResponse[] | null>(null);
   students$ = new BehaviorSubject<StudentVisit[]>([]);
   searchByIdForm = this.formBuilder.group({
     studentId: [null, Validators.required],
@@ -73,8 +75,10 @@ export class LessonPageComponent implements OnInit {
   ticketControl = this.formBuilder.control(null, [Validators.required]);
   ngOnInit(): void {
     const pageData: Partial<PageData> = {};
-    const dataFetch$ = this.restApiService.getLessonById(this.getLessonId())
-      .pipe(switchMap((lesson) => {
+    const dataFetch$ = combineLatest([
+      this.restApiService.getLessonById(this.getLessonId()),
+      this.restApiService.getLessonStudentRecommendations(this.getLessonId())])
+      .pipe(switchMap(([lesson]) => {
         pageData.lesson = lesson;
         return this.restApiService.getGroupById(lesson.groupId);
       }));
@@ -98,19 +102,30 @@ export class LessonPageComponent implements OnInit {
     }
     this.searchByIdForm.disable();
     const userId = this.searchByIdForm.value.studentId;
+    this.searchUser(userId);
+  }
+
+  private searchUser(userId: number): void {
+    this.ticketControl.reset();
     const data$ = combineLatest([
       this.restApiService.getById(userId),
-      this.restApiService.getAvailableUserTickets(userId)
+      this.restApiService.getAvailableUserTickets(userId),
     ]);
     this.searchWrapper.fetch(data$)
       .subscribe({
         next: ([user, tickets]) => {
-          this.searchData$.next({ user, tickets });
+          this.searchData$.next({user, tickets});
           const ticketItems: TicketItem[] = tickets.map((it) => ({
             label: `${it.visitsLeft}: ${this.datePipe.transform(it.validFromTimestamp)} - ${this.datePipe.transform(it.validToTimestamp)}`,
             value: it.id,
           }));
           this.ticketItems$.next([BORG_ITEM, ...ticketItems]);
+          if (ticketItems.length === 0) {
+            this.ticketControl.setValue(BORG_ITEM.value);
+          }
+          if (ticketItems.length === 1) {
+            this.ticketControl.setValue(ticketItems[0].value);
+          }
           this.searchByIdForm.enable();
           this.searchByIdForm.reset();
         },
@@ -154,7 +169,7 @@ export class LessonPageComponent implements OnInit {
               return ({
                 visit: it,
                 student,
-              })
+              });
             });
           }));
         })
@@ -165,5 +180,19 @@ export class LessonPageComponent implements OnInit {
           this.students$.next(visits);
         },
       });
+  }
+
+  openRecommendations(): void {
+    this.recommendationsWrapper.fetch(this.restApiService.getLessonStudentRecommendations(this.getLessonId()))
+      .subscribe({
+        next: (recommendations) => {
+          const students = this.students$.getValue();
+          this.recommendations$.next(recommendations.filter(it => !students.some((visit) => visit.student.id === it.id)));
+        },
+      });
+  }
+
+  addRecommendationClick(studentId: number): void {
+    this.searchUser(studentId);
   }
 }

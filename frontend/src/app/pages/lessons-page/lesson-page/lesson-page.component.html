@@ -55,33 +55,67 @@
       (click)="addToStudent(searchData.user)"
     >Додати на урок</button>
   </div>
-  <div>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        Пошук за ID
-      </mat-expansion-panel-header>
-      <ng-template matExpansionPanelContent>
-        <app-server-error-container
-          [error]="searchWrapper.error$ | async"
-        ></app-server-error-container>
-        <form [formGroup]="searchByIdForm" (ngSubmit)="searchSubmit()">
-          <app-input-wrapper
-            [control]="searchByIdForm.get('studentId')"
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      Пошук за ID
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+      <app-server-error-container
+        [error]="searchWrapper.error$ | async"
+      ></app-server-error-container>
+      <form [formGroup]="searchByIdForm" (ngSubmit)="searchSubmit()">
+        <app-input-wrapper
+          [control]="searchByIdForm.get('studentId')"
+        >
+          <div class="mb-3">
+            <label for="studentId" class="form-label">ID студента</label>
+            <input type="text" class="form-control" id="studentId" formControlName="studentId">
+          </div>
+        </app-input-wrapper>
+        <button
+          type="submit"
+          class="btn btn-primary w-100"
+          [disabled]="searchWrapper.isInStatus(fetchStatus.IN_PROGRESS) | async"
+        >
+          Шукати
+        </button>
+      </form>
+    </ng-template>
+  </mat-expansion-panel>
+  <mat-expansion-panel
+    class="mt-2 panel-without-padding"
+    (opened)="openRecommendations()"
+  >
+    <mat-expansion-panel-header>
+      Рекомендації
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+      <app-loader [loading]="recommendationsWrapper.isInStatuses(fetchStatus.INIT, fetchStatus.IN_PROGRESS) | async"></app-loader>
+      <app-server-error-container
+        [error]="recommendationsWrapper.error$ | async"
+      ></app-server-error-container>
+      <ng-container *ngIf="recommendations$ | async as recommendations">
+        <div
+          *ngIf="recommendations.length === 0"
+          class="p-1 font-weight-bold"
+        >
+          Немає рекомендованих студентів
+        </div>
+        <div
+          *ngFor="let student of recommendations"
+          class="m-2 border rounded d-flex justify-content-between p-1"
+        >
+          <div>
+            <div>{{student.lastName}} {{student.firstName}}</div>
+            <div *ngIf="student.email">{{student.email}}</div>
+          </div>
+          <div
+            (click)="addRecommendationClick(student.id)"
           >
-            <div class="mb-3">
-              <label for="studentId" class="form-label">ID студента</label>
-              <input type="text" class="form-control" id="studentId" formControlName="studentId">
-            </div>
-          </app-input-wrapper>
-          <button
-            type="submit"
-            class="btn btn-primary w-100"
-            [disabled]="searchWrapper.isInStatus(fetchStatus.IN_PROGRESS) | async"
-          >
-            Шукати
-          </button>
-        </form>
-      </ng-template>
-    </mat-expansion-panel>
-  </div>
+            <mat-icon aria-hidden="false" aria-label="Додати юзера">add</mat-icon>
+          </div>
+        </div>
+      </ng-container>
+    </ng-template>
+  </mat-expansion-panel>
 </app-landing>

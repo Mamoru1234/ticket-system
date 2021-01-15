@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { FetchService, FetchStatus } from '../../../services/fetch.service';
 import { RestApiService } from '../../../services/rest-api/rest-api.service';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { UserResponse, UserRole } from '../../../services/rest-api/dto/user.endpoint';
 
 @Component({
@@ -20,16 +20,15 @@ export class CreateUserPageComponent implements OnInit {
   ) { }
   createUserWrapper = this.fetchService.createWrapper();
   createUserForm!: FormGroup;
-  error$ = this.createUserWrapper.error$.pipe(map(FetchService.httpErrorMapper));
   loading$ = this.createUserWrapper.isInStatus(FetchStatus.IN_PROGRESS);
   createdUser$ = new BehaviorSubject<UserResponse | null>(null);
   roleItems = [
     {
-      label: 'Student',
+      label: 'Студент',
       value: UserRole.STUDENT,
     },
     {
-      label: 'Teacher',
+      label: 'Вчитель',
       value: UserRole.TEACHER,
     },
     {

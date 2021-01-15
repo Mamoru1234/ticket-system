@@ -1,18 +1,14 @@
 <app-landing>
-  <h3>Your groups</h3>
-  <div
-    *ngIf="loading$ | async"
-    class="spinner-border"
-    role="status"
-  >
-    <span class="visually-hidden invisible">Loading...</span>
-  </div>
+  <h3>Твої групи</h3>
+  <app-loader
+    [loading]="loading$ | async"
+  ></app-loader>
   <div class="d-flex justify-content-end py-1">
     <button
       class="btn btn-primary"
       routerLink="/groups/create"
     >
-      Add group
+      Додати групу
     </button>
   </div>
   <div *ngIf="groups$ | async as groups" class="row row-cols-1 row-cols-md-4">
@@ -21,6 +17,6 @@
         <div class="card-body">{{group.name}}</div>
       </div>
     </div>
-    <div *ngIf="groups.length === 0">No groups</div>
+    <div *ngIf="groups.length === 0">Ще немає груп</div>
   </div>
 </app-landing>

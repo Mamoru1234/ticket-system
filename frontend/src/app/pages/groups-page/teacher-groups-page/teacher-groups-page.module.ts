@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TeacherGroupsPageComponent } from './teacher-groups-page.component';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingModule } from '../../../components/landing/landing.module';
+import { LoaderModule } from '../../../components/loader/loader.module';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     LandingModule,
-  ]
+    LoaderModule,
+  ],
 })
 export class TeacherGroupsPageModule { }

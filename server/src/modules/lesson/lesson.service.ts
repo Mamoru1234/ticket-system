@@ -3,7 +3,7 @@ import { LessonEntity } from '../database/entity/lesson.entity';
 import { CreateLessonPayload } from './dto/create-lesson.payload';
 import { UserEntity } from '../database/entity/user.entity';
 import { StudentGroupDao } from '../database/dao/student-group.dao';
-import { Connection } from 'typeorm';
+import { Connection, In, Not, Raw } from 'typeorm';
 import { StudentGroupService } from '../student-group/student-group.service';
 import { LessonDao } from '../database/dao/lesson.dao';
 import { AddLessonVisitPayload } from './dto/add-lesson-visit.payload';
@@ -100,6 +100,38 @@ export class LessonService {
       student,
       ticket,
       markedBy: user,
+    });
+  }
+
+  async getRecommendedStudents(lessonId: string, user: UserEntity): Promise<UserEntity[]> {
+    const lesson = await this.lessonDao.findOne(this.connection.manager, {
+      where: {
+        id: lessonId,
+      },
+    });
+    // to validate lesson access
+    await this.studentGroupService.getById(lesson.groupId, user);
+    const lastLessons = await this.connection.manager.createQueryBuilder()
+      .select()
+      .from(LessonEntity, 'lesson')
+      .where('lesson.timestamp < :timestamp', { timestamp: lesson.timestamp })
+      .andWhere('lesson.group = :groupId', { groupId: lesson.groupId })
+      .take(3)
+      .select(['lesson.id'])
+      .getMany();
+    if (lastLessons.length === 0) {
+      return [];
+    }
+    const lastVisits = await this.lessonVisitDao.find(this.connection.manager, {
+      select: ['studentId', 'id'],
+      where: {
+        lessonId: In(lastLessons.map(it => it.id)),
+      },
+    });
+    return this.userDao.find(this.connection.manager, {
+      where: {
+        id: In(lastVisits.map(it => it.studentId)),
+      },
     });
   }
 

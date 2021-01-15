@@ -1,30 +1,26 @@
 <app-landing>
   <div>
-    <h3>Create new user</h3>
-    <div
-      *ngIf="error$ | async as error"
-      class="alert alert-danger"
-      role="alert"
-    >
-      Server error: {{error.message}}
-    </div>
+    <h3>Створити нового користувача</h3>
+    <app-server-error-container
+      [error]="createUserWrapper.error$ | async"
+    ></app-server-error-container>
     <div
       *ngIf="createdUser$ | async as createdUser"
       class="alert alert-secondary"
       role="alert"
     >
-      User created: {{createdUser.lastName}} {{createdUser.firstName}} {{createdUser.id}}
+      Користувач створений: {{createdUser.lastName}} {{createdUser.firstName}} {{createdUser.id}}
     </div>
     <form [formGroup]="createUserForm" (ngSubmit)="submit()">
       <app-input-wrapper [control]="createUserForm.get('firstName')">
         <div class="mb-3">
-          <label for="newUserFirstName" class="form-label">Firstname</label>
+          <label for="newUserFirstName" class="form-label">Ім'я</label>
           <input type="text" class="form-control" id="newUserFirstName" formControlName="firstName">
         </div>
       </app-input-wrapper>
       <app-input-wrapper [control]="createUserForm.get('lastName')">
         <div class="mb-3">
-          <label for="newUserLastName" class="form-label">Lastname</label>
+          <label for="newUserLastName" class="form-label">Прізвище</label>
           <input type="text" class="form-control" id="newUserLastName" formControlName="lastName">
         </div>
       </app-input-wrapper>
@@ -32,7 +28,7 @@
         appearance="outline"
         class="w-100"
       >
-        <mat-label>Role</mat-label>
+        <mat-label>Роль</mat-label>
         <mat-select
           formControlName="role"
         >
@@ -46,7 +42,7 @@
         class="btn btn-primary w-100"
         [disabled]="loading$ | async"
       >
-        Create user
+        Створити
       </button>
     </form>
   </div>

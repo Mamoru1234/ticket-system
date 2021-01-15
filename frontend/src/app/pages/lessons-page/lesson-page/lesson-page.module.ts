@@ -10,6 +10,7 @@ import { ServerErrorContainerModule } from '../../../components/server-error-con
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
   {
@@ -31,6 +32,7 @@ const routes: Routes = [
     MatExpansionModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatIconModule,
   ],
 })
 export class LessonPageModule { }

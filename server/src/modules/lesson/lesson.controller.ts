@@ -12,6 +12,7 @@ import { plainToClass } from 'class-transformer';
 import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.options';
 import { AddLessonVisitPayload } from './dto/add-lesson-visit.payload';
 import { LessonVisitResponse } from '../../dto/lesson-visit.response';
+import { UserResponse } from '../../dto/user.response';
 
 @Controller('lessons')
 export class LessonController {
@@ -72,5 +73,16 @@ export class LessonController {
   ): Promise<LessonVisitResponse[]> {
     const visits = await this.lessonService.getStudentVisits(lessonId, user);
     return plainToClass(LessonVisitResponse, visits, DEFAULT_TRANSFORM_OPTIONS);
+  }
+
+  @Get('/:lessonId/recommended-students')
+  @Role(UserRole.TEACHER)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  async getRecommendedStudents(
+    @Param('lessonId') lessonId: string,
+    @User() user: UserEntity,
+  ): Promise<UserResponse[]> {
+    const students = await this.lessonService.getRecommendedStudents(lessonId, user);
+    return plainToClass(UserResponse, students, DEFAULT_TRANSFORM_OPTIONS);
   }
 }
