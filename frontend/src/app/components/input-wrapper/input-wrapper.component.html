@@ -13,5 +13,8 @@
     <div *ngIf="control.errors.minlength">
       Це поле має бути {{control.errors.minlength.requiredLength}} символів
     </div>
+    <div *ngIf="control.errors.min">
+      Це поле не може бути менше ніж: {{control.errors.min.min}}
+    </div>
   </div>
 </ng-container>

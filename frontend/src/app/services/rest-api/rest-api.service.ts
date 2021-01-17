@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { ActivateUserPayload, CreateUserPayload, UserResponse } from './dto/user.endpoint';
 import { CreateGroupPayload, GroupResponse } from './dto/group.endpoint';
 import {
+  BulkCreateLessonPayload,
   CreateLessonPayload,
   CreateLessonVisitPayload,
   LessonResponse,
@@ -79,6 +80,10 @@ export class RestApiService {
 
   createLesson(data: CreateLessonPayload): Observable<LessonResponse> {
     return this.http.post<LessonResponse>(`${environment.apiUrl}/lessons/create`, data);
+  }
+
+  bulkCreateLessons(data: BulkCreateLessonPayload): Observable<LessonResponse[]> {
+    return this.http.post<LessonResponse[]>(`${environment.apiUrl}/lessons/bulk-create`, data);
   }
 
   getLessonById(lessonId: string): Observable<LessonResponse> {

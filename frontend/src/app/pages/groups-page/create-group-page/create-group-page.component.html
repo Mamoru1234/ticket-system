@@ -1,15 +1,8 @@
 <app-landing>
-  <h3>Create new group</h3>
+  <h3>Створити нову групу</h3>
   <app-server-error-container
     [error]="error$ | async"
   ></app-server-error-container>
-  <div
-    *ngIf="createdGroup$ | async as createdGroup"
-    class="alert alert-secondary"
-    role="alert"
-  >
-    Group created: {{createdGroup.name}} id: {{createdGroup.id}}
-  </div>
   <form [formGroup]="createGroupForm" (ngSubmit)="submit()">
     <div class="mb-3">
       <label for="name" class="form-label">Group name</label>

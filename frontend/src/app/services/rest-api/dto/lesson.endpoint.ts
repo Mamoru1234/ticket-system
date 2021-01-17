@@ -9,6 +9,11 @@ export interface CreateLessonPayload {
   timestamp: number;
 }
 
+export interface BulkCreateLessonPayload {
+  groupId: string;
+  timestamps: number[];
+}
+
 export interface CreateLessonVisitPayload {
   userId: number;
   ticketId?: string;

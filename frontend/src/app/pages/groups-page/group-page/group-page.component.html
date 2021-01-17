@@ -17,6 +17,12 @@
     <h3>Група: {{pageData.group.name}}</h3>
     <div class="d-flex justify-content-end py-1">
       <button
+        class="btn btn-primary mr-1"
+        [routerLink]="'/lessons/schedule/' + pageData.group.id"
+      >
+        Розклад
+      </button>
+      <button
         class="btn btn-primary"
         [routerLink]="'/lessons/create/' + pageData.group.id"
       >

@@ -12,6 +12,7 @@ import { UserDao } from '../database/dao/user.dao';
 import { LessonVisitEntity } from '../database/entity/lesson-visit.entity';
 import { TicketDao } from '../database/dao/ticket.dao';
 import { TicketEntity } from '../database/entity/ticket.entity';
+import { BulkCreateLessonPayload } from './dto/bulk-create-lesson.payload';
 
 @Injectable()
 export class LessonService {
@@ -31,6 +32,19 @@ export class LessonService {
       timestamp: data.timestamp,
       group,
     });
+  }
+
+  async bulkCreateLesson(data: BulkCreateLessonPayload, user: UserEntity): Promise<LessonEntity[]> {
+    const group = await this.studentGroupService.getById(data.groupId, user);
+    const lessons: LessonEntity[] = [];
+    for (const timestamp of data.timestamps) {
+      const lesson = await this.lessonDao.save(this.connection.manager, {
+        timestamp,
+        group,
+      });
+      lessons.push(lesson);
+    }
+    return lessons;
   }
 
   async getLessonsByGroup(groupId: string, user: UserEntity): Promise<LessonEntity[]> {

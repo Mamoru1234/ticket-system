@@ -17,6 +17,14 @@ const routes: Routes = [
         },
       },
       {
+        path: 'schedule/:groupId',
+        loadChildren: () => import('./lesson-schedule-page/lesson-schedule-page.module').then(m => m.LessonSchedulePageModule),
+        canActivate: [UserRoleGuard],
+        data: {
+          requiredRole: UserRole.TEACHER,
+        },
+      },
+      {
         path: 'manage/:lessonId',
         loadChildren: () => import('./lesson-page/lesson-page.module').then(m => m.LessonPageModule),
         canActivate: [UserRoleGuard],

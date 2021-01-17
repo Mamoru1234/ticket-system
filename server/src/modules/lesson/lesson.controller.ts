@@ -13,6 +13,7 @@ import { DEFAULT_TRANSFORM_OPTIONS } from '../../constants/class-transform.optio
 import { AddLessonVisitPayload } from './dto/add-lesson-visit.payload';
 import { LessonVisitResponse } from '../../dto/lesson-visit.response';
 import { UserResponse } from '../../dto/user.response';
+import { BulkCreateLessonPayload } from './dto/bulk-create-lesson.payload';
 
 @Controller('lessons')
 export class LessonController {
@@ -29,6 +30,17 @@ export class LessonController {
   ): Promise<LessonResponse> {
     const lesson = await this.lessonService.createLesson(data, user);
     return plainToClass(LessonResponse, lesson, DEFAULT_TRANSFORM_OPTIONS);
+  }
+
+  @Post('bulk-create')
+  @Role(UserRole.TEACHER)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  async bulkCreateGroup(
+    @User() user: UserEntity,
+    @Body() data: BulkCreateLessonPayload,
+  ): Promise<LessonResponse[]> {
+    const lessons = await this.lessonService.bulkCreateLesson(data, user);
+    return plainToClass(LessonResponse, lessons, DEFAULT_TRANSFORM_OPTIONS);
   }
 
   @Get('/by-group/:groupId')

@@ -1,0 +1,81 @@
+<app-landing>
+  <h3>Створити уроки за розкладом</h3>
+  <app-server-error-container
+    [error]="pageDataWrapper.error$ | async"
+  ></app-server-error-container>
+  <ng-container *ngIf="pageData$ | async as pageData">
+    <mat-card class="mb-1">
+      Група: <a [routerLink]="'/groups/' + pageData.id">{{pageData.name}}</a>
+    </mat-card>
+    <ng-container *ngIf="currentState$ | async as currentState">
+      <mat-card
+        *ngIf="currentState === lessonScheduleState.SETUP"
+      >
+        <form [formGroup]="createScheduleForm" (ngSubmit)="setupSubmit()">
+          <app-input-wrapper
+            [control]="createScheduleForm.get('lessonsCount')"
+          >
+            <div class="mb-1">
+              <label for="lessonsCount" class="form-label">Кількість занять</label>
+              <input type="number" class="form-control" id="lessonsCount" formControlName="lessonsCount">
+            </div>
+          </app-input-wrapper>
+          <mat-form-field
+            appearance="outline"
+            class="w-100 mt-2"
+          >
+            <mat-label>День тижня</mat-label>
+            <mat-select
+              formControlName="day"
+            >
+              <mat-option *ngFor="let item of dateOfWeekOptions" [value]="item.value">
+                {{item.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="form-group">
+            <label for="lessonTime">Час уроку</label>
+            <input type="time" class="form-control" id="lessonTime" formControlName="lessonTime">
+          </div>
+          <div class="form-group">
+            <label for="dateFrom">Початкова дата</label>
+            <input type="date" class="form-control" id="dateFrom" formControlName="dateFrom">
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+          >
+            Сгенерувати
+          </button>
+        </form>
+      </mat-card>
+      <mat-card *ngIf="currentState === lessonScheduleState.VERIFY">
+        <div class="d-flex justify-content-between">
+          <div>Сгенеровані уроки</div>
+          <button
+            class="btn btn-sm btn-outline-primary"
+            (click)="goToState(lessonScheduleState.SETUP)"
+          >Назад</button>
+        </div>
+        <div *ngIf="generatedDates$ | async as generatedDates">
+          <div *ngIf="generatedDates.length == 0">Немає згенерованих уроків спробуйте іншу конфігурацію</div>
+          <div *ngFor="let generatedDate of generatedDates" class="m-1 d-flex">
+            <div>
+              {{generatedDate | date: 'HH:mm EE dd LLL yyyy'}}
+            </div>
+            <div
+              class="cursor-pointer"
+              (click)="removeFromGenerated(generatedDate)"
+            >
+              <mat-icon>close</mat-icon>
+            </div>
+          </div>
+          <button
+            class="btn btn-primary"
+            (click)="createLessons()"
+          >Створити ці уроки</button>
+        </div>
+      </mat-card>
+    </ng-container>
+  </ng-container>
+</app-landing>
