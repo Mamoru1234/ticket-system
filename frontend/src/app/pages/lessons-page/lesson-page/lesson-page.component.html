@@ -8,7 +8,7 @@
     <div>Група: <a [routerLink]="'/groups/' + pageData.group.id">{{pageData.group.name}}</a></div>
     <div>Час уроку: {{pageData.lesson.timestamp | date: 'HH:mm EE dd LLL yyyy'}}</div>
   </div>
-  <div class="my-2">
+  <mat-card class="my-1">
     <h4>Студенти на занятті</h4>
     <app-server-error-container
       [error]="studentsWrapper.error$ | async"
@@ -23,15 +23,20 @@
         {{studentVisit.student.id}}: {{studentVisit.student.lastName}} {{studentVisit.student.firstName}}
         <span class="text-danger" *ngIf="studentVisit.visit.ticketId == null">Борг</span>
       </div>
-      <div *ngIf="studentVisits.length === 0" class="p-2 text-warning">Немає студентів на занятті</div>
+      <div *ngIf="studentVisits.length === 0" class="text-warning">Немає студентів на занятті</div>
     </div>
-  </div>
-  <div *ngIf="searchData$ | async as searchData" class="py-2">
+  </mat-card>
+  <mat-card *ngIf="searchData$ | async as searchData" class="my-1">
     <div>Відмітити студента:</div>
     <app-server-error-container
       [error]="addVisitWrapper.error$ | async"
     ></app-server-error-container>
     <div>{{searchData.user.id}}: {{searchData.user.lastName}} {{searchData.user.firstName}}</div>
+    <a
+      *ngIf="!ticketSelected"
+      [routerLink]="'/users/tickets/create/' + searchData.user.id"
+      class="my-1"
+    >Виписати абонемент</a>
     <app-input-wrapper
       [control]="ticketControl"
     >
@@ -54,7 +59,7 @@
       [disabled]="addVisitWrapper.isInStatus(fetchStatus.IN_PROGRESS) | async"
       (click)="addToStudent(searchData.user)"
     >Додати на урок</button>
-  </div>
+  </mat-card>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       Пошук за ID
@@ -103,7 +108,7 @@
         </div>
         <div
           *ngFor="let student of recommendations"
-          class="m-2 border rounded d-flex justify-content-between p-1"
+          class="my-2 border rounded d-flex justify-content-between p-1"
         >
           <div>
             <div>{{student.lastName}} {{student.firstName}}</div>

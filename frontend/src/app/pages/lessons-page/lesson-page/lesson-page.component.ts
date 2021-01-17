@@ -14,6 +14,7 @@ import { UserResponse } from '../../../services/rest-api/dto/user.endpoint';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TicketResponse } from '../../../services/rest-api/dto/ticket.endpoint';
 import { DatePipe } from '@angular/common';
+import { TicketUtils } from '../../../utils/ticket-utils';
 
 export interface PageData {
   lesson: LessonResponse;
@@ -123,7 +124,10 @@ export class LessonPageComponent implements OnInit {
           if (ticketItems.length === 0) {
             this.ticketControl.setValue(BORG_ITEM.value);
           }
-          if (ticketItems.length === 1) {
+          // tslint:disable-next-line:no-non-null-assertion
+          const pageData = this.pageData$.getValue()!;
+          const validTicket = tickets.find((it) => TicketUtils.isTicketValidForLesson(pageData.lesson.timestamp, it));
+          if (validTicket) {
             this.ticketControl.setValue(ticketItems[0].value);
           }
           this.searchByIdForm.enable();
@@ -194,5 +198,10 @@ export class LessonPageComponent implements OnInit {
 
   addRecommendationClick(studentId: number): void {
     this.searchUser(studentId);
+  }
+
+  get ticketSelected(): boolean {
+    const value = this.ticketControl.value;
+    return value != null && value !== BORG;
   }
 }
