@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RestApiService } from '../../services/rest-api/rest-api.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { TokenService } from '../../services/token.service';
 import { BehaviorSubject } from 'rxjs';
 import { FetchService, FetchStatus } from '../../services/fetch.service';
+import { AppRouter } from '../../services/app-router';
 
 @Component({
   selector: 'app-login-page',
@@ -22,10 +22,9 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly restApiService: RestApiService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
     private readonly tokenService: TokenService,
     private readonly fetchService: FetchService,
+    private readonly appRouter: AppRouter,
   ) { }
 
   ngOnInit(): void {
@@ -43,12 +42,7 @@ export class LoginPageComponent implements OnInit {
     this.loginFetchWrapper.fetch(this.restApiService.login(this.form.value)).subscribe({
       next: (response) => {
         this.tokenService.setToken(response.token);
-        const redirect = this.route.snapshot.queryParams.redirect;
-        const targetUrl = redirect
-          ? redirect
-          : '/';
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate([targetUrl]);
+        this.appRouter.restoreNavigation('/');
       },
       error: (e) => {
         console.log(e);

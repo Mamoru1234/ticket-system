@@ -8,14 +8,9 @@ import { AppRouter } from './app-router';
 export class LoginPageService {
   constructor(
     private readonly appRouter: AppRouter,
-    private readonly router: Router,
   ) {
   }
   redirectToLoginPage(): void {
-    this.appRouter.navigate('/login', {
-      queryParams: {
-        redirect: this.router.url,
-      },
-    });
+    this.appRouter.saveNavigation('/login');
   }
 }

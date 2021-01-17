@@ -6,6 +6,7 @@ import { UserResponse } from '../../../services/rest-api/dto/user.endpoint';
 import { RestApiService } from '../../../services/rest-api/rest-api.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { DATE_VALUES, DateUtils } from '../../../utils/date-utils';
+import { AppRouter } from '../../../services/app-router';
 
 export enum DateRange {
   WEEK = 'WEEK',
@@ -27,6 +28,7 @@ export class CreateTicketPageComponent implements OnInit {
     private readonly restApi: RestApiService,
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
+    private readonly appRouter: AppRouter,
   ) { }
   fetchStatus = FetchStatus;
   pageDataWrapper = this.fetchService.createWrapper();
@@ -62,8 +64,7 @@ export class CreateTicketPageComponent implements OnInit {
       validToTimestamp: Date.parse(formValue.validTo),
     })).subscribe({
       next: () => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate([`/users/manage/${this.getUserId()}`]);
+        this.appRouter.restoreNavigation(`/users/manage/${this.getUserId()}`);
       },
     });
   }

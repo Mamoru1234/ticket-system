@@ -35,6 +35,7 @@
     <a
       *ngIf="!ticketSelected"
       [routerLink]="'/users/tickets/create/' + searchData.user.id"
+      [queryParams]="{ redirect: '/lessons/manage/' + getLessonId() }"
       class="my-1"
     >Виписати абонемент</a>
     <app-input-wrapper
